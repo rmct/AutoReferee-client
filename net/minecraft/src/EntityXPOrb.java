@@ -114,7 +114,11 @@ public class EntityXPOrb extends Entity
             if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > var1 * var1)
             {
                 this.closestPlayer = this.worldObj.getClosestPlayerToEntity(this, var1);
-            }
+				//START CODE
+                if(AutoReferee.get().getPlayer().equals(this.closestPlayer))
+	                this.closestPlayer = null;
+                //END CODE
+			}
 
             this.xpTargetColor = this.xpColor;
         }

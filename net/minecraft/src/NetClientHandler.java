@@ -59,7 +59,10 @@ public class NetClientHandler extends NetHandler
         this.mc = par1Minecraft;
         Socket var4 = new Socket(InetAddress.getByName(par2Str), par3);
         this.netManager = new TcpConnection(par1Minecraft.getLogAgent(), var4, "Client", this);
-    }
+		//START CODE
+        AutoReferee.get().set(par1Minecraft, this);
+        //END CODE
+	}
 
     public NetClientHandler(Minecraft par1Minecraft, String par2Str, int par3, GuiScreen par4GuiScreen) throws IOException
     {
@@ -172,6 +175,9 @@ public class NetClientHandler extends NetHandler
         this.currentServerMaxPlayers = par1Packet1Login.maxPlayers;
         this.mc.playerController.setGameType(par1Packet1Login.gameType);
         this.mc.gameSettings.sendSettingsToServer();
+		//START CODE
+        AutoReferee.get().registerAutoRefereeChannel();
+        //END CODE
     }
 
     public void handleVehicleSpawn(Packet23VehicleSpawn par1Packet23VehicleSpawn)
@@ -1433,6 +1439,12 @@ public class NetClientHandler extends NetHandler
                 var7.printStackTrace();
             }
         }
+		//START CODE
+        else if(AutoReferee.CHANNEL.equals(par1Packet250CustomPayload.channel))
+        {
+        	AutoReferee.get().handleCustomPayload(par1Packet250CustomPayload);
+        }
+    	//END CODE
     }
 
     public void func_96436_a(Packet206SetObjective par1Packet206SetObjective)

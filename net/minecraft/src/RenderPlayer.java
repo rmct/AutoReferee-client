@@ -218,7 +218,11 @@ public class RenderPlayer extends RenderLiving
 
         float var11;
 
-        if (this.loadDownloadableImageTexture(par1EntityPlayer.cloakUrl, (String)null) && !par1EntityPlayer.getHasActivePotion() && !par1EntityPlayer.getHideCape())
+		//START CODE
+        //if (this.loadDownloadableImageTexture(par1EntityPlayer.playerCloakUrl, (String)null) && !par1EntityPlayer.getHasActivePotion() && !par1EntityPlayer.getHideCape())
+		String url = AutoReferee.get().getCapeUrlOfPlayer(par1EntityPlayer.username, par1EntityPlayer.cloakUrl);
+        if (this.loadDownloadableImageTexture(url, (String)null) && !par1EntityPlayer.getHasActivePotion() && !par1EntityPlayer.getHideCape())
+        //END CODE
         {
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, 0.0F, 0.125F);

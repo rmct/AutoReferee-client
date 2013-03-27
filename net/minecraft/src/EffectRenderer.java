@@ -132,7 +132,10 @@ public class EffectRenderer
             {
                 EntityFX var12 = (EntityFX)this.fxLayers[var9].get(var11);
                 var10.setBrightness(var12.getBrightnessForRender(par2));
-                var12.renderParticle(var10, par2, var4, var8, var5, var6, var7);
+				//START CODE - DON'T RENDER POTION PARTICLES FOR OWN PLAYER
+                if(var8!=0 || var12.particleTextureIndex/16 != 8 || !AutoReferee.get().getPlayer().equals(par1Entity))
+                //END CODE
+					var12.renderParticle(var10, par2, var4, var8, var5, var6, var7);
             }
         }
     }

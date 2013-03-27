@@ -340,6 +340,9 @@ public class EntityArrow extends Entity implements IProjectile
                             this.setDead();
                         }
                     }
+					//START CODE
+                    /*
+                    //END CODE
                     else
                     {
                         this.motionX *= -0.10000000149011612D;
@@ -349,6 +352,9 @@ public class EntityArrow extends Entity implements IProjectile
                         this.prevRotationYaw += 180.0F;
                         this.ticksInAir = 0;
                     }
+					//START CODE
+                    */
+                    //END CODE
                 }
                 else
                 {

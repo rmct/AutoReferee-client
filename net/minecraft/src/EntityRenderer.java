@@ -777,7 +777,10 @@ public class EntityRenderer
 
                 float var17;
 
-                if (this.mc.thePlayer.isPotionActive(Potion.nightVision))
+				//START CODE
+                //if (this.mc.thePlayer.isPotionActive(Potion.nightVision))
+                if (this.mc.thePlayer.isPotionActive(Potion.nightVision) || AutoReferee.get().nightVision)
+                //END CODE
                 {
                     var16 = this.getNightVisionBrightness(this.mc.thePlayer, par1);
                     var17 = 1.0F / var13;
@@ -872,6 +875,10 @@ public class EntityRenderer
      */
     private float getNightVisionBrightness(EntityPlayer par1EntityPlayer, float par2)
     {
+		//START CODE
+        if (AutoReferee.get().nightVision)
+        	return 1.0F;
+        //END CODE
         int var3 = par1EntityPlayer.getActivePotionEffect(Potion.nightVision).getDuration();
         return var3 > 200 ? 1.0F : 0.7F + MathHelper.sin(((float)var3 - par2) * (float)Math.PI * 0.2F) * 0.3F;
     }
@@ -963,7 +970,10 @@ public class EntityRenderer
                 this.renderEndNanoTime = System.nanoTime();
                 this.mc.mcProfiler.endStartSection("gui");
 
-                if (!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null)
+				//START CODE
+                //if (!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null)
+                if (true)
+                //END CODE
                 {
                     this.mc.ingameGUI.renderGameOverlay(par1, this.mc.currentScreen != null, var16, var17);
                 }
@@ -1125,7 +1135,10 @@ public class EntityRenderer
                 var6.renderParticles(var4, par1);
                 this.disableLightmap((double)par1);
 
-                if (this.mc.objectMouseOver != null && var4.isInsideOfMaterial(Material.water) && var4 instanceof EntityPlayer && !this.mc.gameSettings.hideGUI)
+				//START CODE
+                //if (this.mc.objectMouseOver != null && var4.isInsideOfMaterial(Material.water) && var4 instanceof EntityPlayer && !this.mc.gameSettings.hideGUI)
+                if (this.mc.objectMouseOver != null && var4.isInsideOfMaterial(Material.water) && var4 instanceof EntityPlayer)
+                //END CODE
                 {
                     var17 = (EntityPlayer)var4;
                     GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -1190,7 +1203,10 @@ public class EntityRenderer
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_BLEND);
 
-            if (this.cameraZoom == 1.0D && var4 instanceof EntityPlayer && !this.mc.gameSettings.hideGUI && this.mc.objectMouseOver != null && !var4.isInsideOfMaterial(Material.water))
+			//START CODE
+            //if (this.cameraZoom == 1.0D && var4 instanceof EntityPlayer && !this.mc.gameSettings.hideGUI && this.mc.objectMouseOver != null && !var4.isInsideOfMaterial(Material.water))
+            if (this.cameraZoom == 1.0D && var4 instanceof EntityPlayer && this.mc.objectMouseOver != null && !var4.isInsideOfMaterial(Material.water))
+            //END CODE
             {
                 var17 = (EntityPlayer)var4;
                 GL11.glDisable(GL11.GL_ALPHA_TEST);

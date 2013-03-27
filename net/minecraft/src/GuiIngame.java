@@ -17,7 +17,10 @@ public class GuiIngame extends Gui
 
     /** ChatGUI instance that retains all previous chat data */
     private final GuiNewChat persistantChatGUI;
-    private int updateCounter = 0;
+    //START CODE
+    //private int updateCounter = 0;
+    protected int updateCounter = 0;
+    //END CODE
 
     /** The string specifying which record music is playing */
     private String recordPlaying = "";
@@ -89,8 +92,11 @@ public class GuiIngame extends Gui
         int var26;
         int var47;
         int var50;
-
-        if (!this.mc.playerController.enableEverythingIsScrewedUpMode())
+		
+		//START CODE
+        //if (!this.mc.playerController.enableEverythingIsScrewedUpMode())
+        if (!this.mc.playerController.enableEverythingIsScrewedUpMode() && !this.mc.gameSettings.hideGUI)
+        //END CODE
         {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.mc.renderEngine.bindTexture("/gui/gui.png");
@@ -519,10 +525,20 @@ public class GuiIngame extends Gui
         this.mc.mcProfiler.endSection();
         GL11.glPopMatrix();
         var42 = this.mc.theWorld.getScoreboard().func_96539_a(0);
+		
+		//START CODE
+     	if (AutoReferee.get().tickInit == -1) {
+     		AutoReferee.get().tickInit = this.updateCounter;
+     	}
+     	if (AutoReferee.get().startOfMatch && (this.updateCounter - AutoReferee.get().tickInit > 20)) {
+     		AutoReferee.get().startOfMatch = false;
+     	}
+     	//END CODE  
 
-        if (this.mc.gameSettings.keyBindPlayerList.pressed && (!this.mc.isIntegratedServerRunning() || this.mc.thePlayer.sendQueue.playerInfoList.size() > 1 || var42 != null))
-        {
-            this.mc.mcProfiler.startSection("playerList");
+		//START CODE
+        //if (this.mc.gameSettings.keyBindPlayerList.pressed && (!this.mc.isIntegratedServerRunning() || this.mc.thePlayer.sendQueue.playerInfoList.size() > 1) || var42 != null)
+     	if (AutoReferee.get().showPlayerList(this.updateCounter)) {
+            /*this.mc.mcProfiler.startSection("playerList");
             NetClientHandler var39 = this.mc.thePlayer.sendQueue;
             List var41 = var39.playerInfoList;
             var38 = var39.currentServerMaxPlayers;
@@ -607,8 +623,36 @@ public class GuiIngame extends Gui
                     this.zLevel -= 100.0F;
                 }
             }
-        }
+        }*/
+		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
+			AutoRefereeHUDRFW.renderPlayerList(this.mc);
+		else if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))
+			AutoRefereeHUDUHC.renderPlayerList(this.mc);
+		}
+		//END CODE
 
+		//START CODE
+     	if (!AutoReferee.get().showPlayerList(updateCounter) && !AutoReferee.get().showTeamList(updateCounter)) {
+     		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
+     			AutoRefereeHUDRFW.renderGeneralHUD(this.mc);
+     	}
+     	//END CODE
+		
+		//START CODE
+     	if (AutoReferee.get().showTeamList(updateCounter)) {
+     		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
+     			AutoRefereeHUDRFW.renderTeamList(this.mc);
+     		if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))
+     			AutoRefereeHUDUHC.renderTeamList(this.mc);
+     	}
+     	//END CODE
+
+     	//START CODE
+     	if (AutoReferee.get().hasMessage(updateCounter)){
+     		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
+     			AutoRefereeHUDRFW.renderEventFeed(this.mc);
+		}
+     	//END CODE
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
