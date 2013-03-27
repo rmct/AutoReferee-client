@@ -411,7 +411,8 @@ public class RenderLiving extends Render
             {
                 String var13 = par1EntityLiving.func_96090_ax();
 
-                if (par1EntityLiving.isSneaking())
+                //START CODE
+                /*if (par1EntityLiving.isSneaking())
                 {
                     FontRenderer var14 = this.getFontRendererFromRenderManager();
                     GL11.glPushMatrix();
@@ -444,9 +445,13 @@ public class RenderLiving extends Render
                     GL11.glPopMatrix();
                 }
                 else
-                {
+                {*/
+                //END CODE
                     this.func_96449_a(par1EntityLiving, par2, par4, par6, var13, var9, var10);
-                }
+                //START CODE
+            	//}
+                //END CODE
+                
             }
         }
     }
