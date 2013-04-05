@@ -3,6 +3,7 @@ package net.minecraft.src;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 public class EffectRenderer
@@ -104,6 +105,12 @@ public class EffectRenderer
                 {
                     EntityFX var11 = (EntityFX)this.fxLayers[var8].get(var10);
                     var9.setBrightness(var11.getBrightnessForRender(par2));
+                    //START CODE - DON'T RENDER POTION PARTICLES unless they are a certain distance away.
+                    double xdiff = var11.posX - par1Entity.posX;
+                    double ydiff = var11.posY - par1Entity.posY;
+                    double zdiff = var11.posZ - par1Entity.posZ;
+                    if(var8 != 0 || var11.particleTextureIndexY != 8 || (xdiff*xdiff+ydiff*ydiff+zdiff*zdiff) >= 2.0 )
+                    //END CODE
                     var11.renderParticle(var9, par2, var3, var7, var4, var5, var6);
                 }
 
@@ -132,10 +139,7 @@ public class EffectRenderer
             {
                 EntityFX var12 = (EntityFX)this.fxLayers[var9].get(var11);
                 var10.setBrightness(var12.getBrightnessForRender(par2));
-				//START CODE - DON'T RENDER POTION PARTICLES FOR OWN PLAYER
-                if(var8!=0 || var12.particleTextureIndexX != 8 || !AutoReferee.get().getPlayer().equals(par1Entity))
-                //END CODE
-					var12.renderParticle(var10, par2, var4, var8, var5, var6, var7);
+				var12.renderParticle(var10, par2, var4, var8, var5, var6, var7);
             }
         }
     }
