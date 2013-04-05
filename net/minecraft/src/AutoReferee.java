@@ -240,7 +240,7 @@ public class AutoReferee {
 							obj.setStatus(AutoRefereeObjectiveStatus.SAFE);
 						else if ("carry".equalsIgnoreCase(command[4]))
 							obj.setStatus(AutoRefereeObjectiveStatus.PLAYER);
-						else if ("vm".equalsIgnoreCase(command[4]))
+						else if ("target".equalsIgnoreCase(command[4]))
 							obj.setStatus(AutoRefereeObjectiveStatus.VICTORY_MONUMENT);
 						if (oldStatus == AutoRefereeObjectiveStatus.FLEECY_BOX && obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX && !this.startOfMatch)
 							// not start of match because it means that the message is sent within 1 second after the match|init message.
