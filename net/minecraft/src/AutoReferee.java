@@ -68,6 +68,7 @@ public class AutoReferee {
 	private String gameType;
 	public boolean nightVision;
 	public boolean swapTeams;
+	public boolean registeredChannel;
 
 	public AutoReferee() {
 		renderItem = new RenderItem();
@@ -95,6 +96,7 @@ public class AutoReferee {
 		this.gameType = "RFW";
 		this.nightVision = false;
 		this.swapTeams = false;
+		this.registeredChannel = false;
 	}
 
 	public static AutoReferee get() {
@@ -257,6 +259,7 @@ public class AutoReferee {
 				this.resetValues();
 				this.tickInit = -1;
 				this.startOfMatch = true;
+				this.registeredChannel = true;
 			} else if ("time".equals(command[2])) {
 				this.setTime(command[3]);
 			} else if ("countdown".equals(command[2])) {
@@ -281,7 +284,6 @@ public class AutoReferee {
 				gameType = command[3].toUpperCase();
 			}
 		}
-
 	}
 
 	public boolean hasMessage(int tick) {

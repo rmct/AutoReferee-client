@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
+
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -538,7 +540,8 @@ public class GuiIngame extends Gui
 		//START CODE
         //if (this.mc.gameSettings.keyBindPlayerList.pressed && (!this.mc.isIntegratedServerRunning() || this.mc.thePlayer.sendQueue.playerInfoList.size() > 1) || var42 != null)
      	if (AutoReferee.get().showPlayerList(this.updateCounter)) {
-            /*this.mc.mcProfiler.startSection("playerList");
+     	  if(!AutoReferee.get().registeredChannel){
+            this.mc.mcProfiler.startSection("playerList");
             NetClientHandler var39 = this.mc.thePlayer.sendQueue;
             List var41 = var39.playerInfoList;
             var38 = var39.currentServerMaxPlayers;
@@ -623,12 +626,13 @@ public class GuiIngame extends Gui
                     this.zLevel -= 100.0F;
                 }
             }
-        }*/
+     	}else{
 		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
 			AutoRefereeHUDRFW.renderPlayerList(this.mc);
 		else if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))
 			AutoRefereeHUDUHC.renderPlayerList(this.mc);
-		}
+		}}
+     	//Logger.getLogger("Minecraft").info(AutoReferee.get().registeredChannel + " - ");
 		//END CODE
 
 		//START CODE

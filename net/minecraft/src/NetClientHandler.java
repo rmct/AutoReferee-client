@@ -176,6 +176,7 @@ public class NetClientHandler extends NetHandler
         this.mc.playerController.setGameType(par1Packet1Login.gameType);
         this.mc.gameSettings.sendSettingsToServer();
 		//START CODE
+        AutoReferee.get().resetValues();
         AutoReferee.get().registerAutoRefereeChannel();
         //END CODE
     }
