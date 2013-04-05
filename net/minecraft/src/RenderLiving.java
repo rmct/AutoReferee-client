@@ -400,8 +400,11 @@ public class RenderLiving extends Render
      */
     protected void passSpecialRender(EntityLiving par1EntityLiving, double par2, double par4, double par6)
     {
-        if (Minecraft.isGuiEnabled() && par1EntityLiving != this.renderManager.livingPlayer && !par1EntityLiving.func_98034_c(Minecraft.getMinecraft().thePlayer) && (par1EntityLiving.func_94059_bO() || par1EntityLiving.func_94056_bM() && par1EntityLiving == this.renderManager.field_96451_i))
-        {
+        //START CODE - Don't hide nametags on F1
+    	//if (Minecraft.isGuiEnabled() && par1EntityLiving != this.renderManager.livingPlayer && !par1EntityLiving.func_98034_c(Minecraft.getMinecraft().thePlayer) && (par1EntityLiving.func_94059_bO() || par1EntityLiving.func_94056_bM() && par1EntityLiving == this.renderManager.field_96451_i))
+    	if (par1EntityLiving != this.renderManager.livingPlayer && !par1EntityLiving.func_98034_c(Minecraft.getMinecraft().thePlayer) && (par1EntityLiving.func_94059_bO() || par1EntityLiving.func_94056_bM() && par1EntityLiving == this.renderManager.field_96451_i))
+    	//END CODE
+    	{
             float var8 = 1.6F;
             float var9 = 0.016666668F * var8;
             double var10 = par1EntityLiving.getDistanceSqToEntity(this.renderManager.livingPlayer);
