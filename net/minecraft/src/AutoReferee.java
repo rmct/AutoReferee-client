@@ -762,6 +762,7 @@ public class AutoReferee {
 	/* Render a right-aligned string */
 	public int renderString(String text, float x, float y, float scale, int color, boolean shadow) {
 		renderSettingsStart(x, y, 0, scale);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/font/default.png"));
 		int returnValue = 0;
 		if (shadow)
 			returnValue = this.mc.fontRenderer.drawStringWithShadow(text, 0, 0, color);
@@ -840,6 +841,7 @@ public class AutoReferee {
 		if (amount > 0)
 			this.renderString("" + amount, AUTOREFEREE_ICON_SIZE * 0.65F, AUTOREFEREE_ICON_SIZE * 0.75F, scale * 0.8F, color, true);
 		renderSettingsEnd();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/font/default.png"));
 		return scale * AUTOREFEREE_ICON_TEXTURE_SIZE;
 	}
 
