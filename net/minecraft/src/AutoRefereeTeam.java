@@ -124,6 +124,15 @@ public class AutoRefereeTeam {
 		long color = Long.valueOf(hexColorCode.substring(0, 2), 16);
 		return ((float) color / 255);
 	}
+	
+	public String getScore(){
+		int score = 0;
+		for (AutoRefereeObjective obj : objectives){
+			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX)
+					score++;
+		}
+		return "" + score;
+	}
 
 }
 // END CODE

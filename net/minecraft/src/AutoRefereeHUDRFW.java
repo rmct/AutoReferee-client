@@ -198,6 +198,10 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 				width += AUTOREFEREE_HUD_WIDTH_CUP_ICON;
 			}
 			xOffset = scaledResolution.getScaledWidth() / 2 - widthClock / 2 - width - align;
+			//RENDER SCORE
+			mc.ingameGUI.drawRect((int) (xOffset - align- 13), 0, (int) (xOffset - align), height, Long.valueOf("EF3F3F3F", 16).intValue());
+			autoReferee.renderCenteredString(at.getScore(), xOffset - align - 13/2, 1, scale, 16777215, false);
+			//RENDER TEAM NAME
 			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + AUTOREFEREE_HUD_WIDTH_CUP_ICON + align), height, at.getBoxColor());
 			autoReferee.renderCenteredString(at.getName(), xOffset + width / 2, 1, scale, 16777215, false);
 			if (at == winners) {
@@ -206,16 +210,11 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			xOffset += width + align;
 		}
 		// display time
-		if (at1 != null && at2 != null & !autoReferee.countingDown) {
+		if (at1 != null && at2 != null){
 			xOffset += align;
 			String text = autoReferee.getTime();
-			width = mc.fontRenderer.getStringWidth(text) * scale;
-			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
-			autoReferee.renderString(text, xOffset, 1, scale, 16777215, true);
-			xOffset += width + align;
-		} else if (autoReferee.countingDown) {
-			xOffset += align;
-			String text = autoReferee.getCountdown();
+			if(autoReferee.countingDown)
+				text = autoReferee.getCountdown();
 			width = mc.fontRenderer.getStringWidth(text) * scale;
 			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
 			autoReferee.renderString(text, xOffset, 1, scale, 16777215, true);
@@ -229,8 +228,12 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			if (at == winners) {
 				width += AUTOREFEREE_HUD_WIDTH_CUP_ICON;
 			}
+			//RENDER TEAM NAME
 			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, at.getBoxColor());
 			autoReferee.renderCenteredString(at.getName(), xOffset + width / 2, 1, scale, 16777215, false);
+			//RENDER SCORE
+			mc.ingameGUI.drawRect((int) (xOffset + width + align + 13), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
+			autoReferee.renderCenteredString(at.getScore(), xOffset + width + align + 7, 1, scale, 16777215, false);
 			if (at == winners) {
 				autoReferee.renderAutoRefereeIcon(AutoReferee.AUTOREFEREE_WINNERS_ICON, 0, xOffset + width - AUTOREFEREE_HUD_WIDTH_CUP_ICON, 0, AUTOREFEREE_HUD_SCALE_CUP_ICON);
 			}
