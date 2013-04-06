@@ -125,13 +125,22 @@ public class AutoRefereeTeam {
 		return ((float) color / 255);
 	}
 	
-	public String getScore(){
+	public int getScore(){
 		int score = 0;
 		for (AutoRefereeObjective obj : objectives){
 			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX)
 					score++;
 		}
-		return "" + score;
+		return score;
+	}
+	
+	public ArrayList<AutoRefereeObjective> getScoredObjectives(){
+		ArrayList<AutoRefereeObjective> list = new ArrayList<AutoRefereeObjective>();
+		for (AutoRefereeObjective obj : objectives){
+			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX)
+					list.add(obj);
+		}
+		return list;
 	}
 
 }

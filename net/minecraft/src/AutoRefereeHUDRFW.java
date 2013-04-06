@@ -199,8 +199,15 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			}
 			xOffset = scaledResolution.getScaledWidth() / 2 - widthClock / 2 - width - align;
 			//RENDER SCORE
-			mc.ingameGUI.drawRect((int) (xOffset - align- 13), 0, (int) (xOffset - align), height, Long.valueOf("EF3F3F3F", 16).intValue());
-			autoReferee.renderCenteredString(at.getScore(), xOffset - align - 13/2, 1, scale, 16777215, false);
+			if(at.getScore() != 0){
+				mc.ingameGUI.drawRect((int) (xOffset - align- PLAYER_LIST_OBJECTIVE_OFFSET*scale/2*at.getScore()-5), 0, (int) (xOffset - align), height, Long.valueOf("EF3F3F3F", 16).intValue());
+				int index = 0;
+				for(AutoRefereeObjective obj : at.getScoredObjectives()){
+					mc.ingameGUI.drawRect((int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
+					autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
+				    index++;
+				}
+			}
 			//RENDER TEAM NAME
 			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + AUTOREFEREE_HUD_WIDTH_CUP_ICON + align), height, at.getBoxColor());
 			autoReferee.renderCenteredString(at.getName(), xOffset + width / 2, 1, scale, 16777215, false);
@@ -231,11 +238,18 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			//RENDER TEAM NAME
 			mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, at.getBoxColor());
 			autoReferee.renderCenteredString(at.getName(), xOffset + width / 2, 1, scale, 16777215, false);
-			//RENDER SCORE
-			mc.ingameGUI.drawRect((int) (xOffset + width + align + 13), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
-			autoReferee.renderCenteredString(at.getScore(), xOffset + width + align + 7, 1, scale, 16777215, false);
 			if (at == winners) {
 				autoReferee.renderAutoRefereeIcon(AutoReferee.AUTOREFEREE_WINNERS_ICON, 0, xOffset + width - AUTOREFEREE_HUD_WIDTH_CUP_ICON, 0, AUTOREFEREE_HUD_SCALE_CUP_ICON);
+			}
+			//RENDER SCORE
+			if(at.getScore() != 0){
+				mc.ingameGUI.drawRect((int) (xOffset + width + align + 5 + PLAYER_LIST_OBJECTIVE_OFFSET*scale/2*at.getScore()), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
+				int index = 0;
+				for(AutoRefereeObjective obj : at.getScoredObjectives()){
+					mc.ingameGUI.drawRect((int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
+					autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset+width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
+				    index++;
+				}
 			}
 		}
 	}
