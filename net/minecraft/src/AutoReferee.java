@@ -792,7 +792,8 @@ public class AutoReferee {
 
 	/* This method is used for rendering an objective above a player's head and in the player list */
 	public void renderItem(int itemId, int itemDataValue, int x, int y, float scale) {
-		renderItem(itemId, itemDataValue, 1, x, y, scale);
+		if(itemId != 0)
+		    renderItem(itemId, itemDataValue, 1, x, y, scale);
 	}
 
 	public void renderItem(int itemId, int itemDataValue, int itemAmount, int x, int y, float scale) {

@@ -203,9 +203,11 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 				mc.ingameGUI.drawRect((int) (xOffset - align- PLAYER_LIST_OBJECTIVE_OFFSET*scale/2*at.getScore()-5), 0, (int) (xOffset - align), height, Long.valueOf("EF3F3F3F", 16).intValue());
 				int index = 0;
 				for(AutoRefereeObjective obj : at.getScoredObjectives()){
-					mc.ingameGUI.drawRect((int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
-					autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
-				    index++;
+					if(obj.getId() != 0){
+						mc.ingameGUI.drawRect((int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
+						autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset - align - 10 - PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
+					    index++;
+					}
 				}
 			}
 			//RENDER TEAM NAME
@@ -246,9 +248,11 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 				mc.ingameGUI.drawRect((int) (xOffset + width + align + 5 + PLAYER_LIST_OBJECTIVE_OFFSET*scale/2*at.getScore()), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
 				int index = 0;
 				for(AutoRefereeObjective obj : at.getScoredObjectives()){
-					mc.ingameGUI.drawRect((int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
-					autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset+width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
-				    index++;
+					if(obj.getId() != 0){
+						mc.ingameGUI.drawRect((int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, (int)(xOffset + width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index + PLAYER_LIST_OBJ_BORDER_WIDTH + PLAYER_LIST_OBJ_RECT_WIDTH * scale/2), 9, 0x33FFFFFF);
+						autoReferee.renderItem(obj.getId(), obj.getData(), (int)(xOffset+width + align + 3 + PLAYER_LIST_OBJECTIVE_OFFSET * scale/2 * index), 1, scale/2);
+					    index++;
+					}
 				}
 			}
 		}

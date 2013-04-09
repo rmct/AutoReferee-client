@@ -128,7 +128,7 @@ public class AutoRefereeTeam {
 	public int getScore(){
 		int score = 0;
 		for (AutoRefereeObjective obj : objectives){
-			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX)
+			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX && obj.getId() != 0)
 					score++;
 		}
 		return score;
@@ -137,7 +137,7 @@ public class AutoRefereeTeam {
 	public ArrayList<AutoRefereeObjective> getScoredObjectives(){
 		ArrayList<AutoRefereeObjective> list = new ArrayList<AutoRefereeObjective>();
 		for (AutoRefereeObjective obj : objectives){
-			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX)
+			if (obj.getStatus() != AutoRefereeObjectiveStatus.FLEECY_BOX && obj.getId() != 0)
 					list.add(obj);
 		}
 		return list;
