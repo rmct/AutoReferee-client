@@ -211,18 +211,26 @@ public class AutoReferee {
 				}
 			} else if ("goal".equals(command[2])) {
 				// team object events
-				String[] blockInfo = (command[3].substring(1)).split(",");
-				int blockId = Integer.parseInt(blockInfo[0]);
-				int blockData = 0;
-				if(blockInfo.length >= 2)
-					blockData = Integer.parseInt(blockInfo[1]);
-				
-				if (command[3].startsWith("+")) {
-					// player object retrieval
-					addObjectiveForTeam(teamName, blockId, blockData);
-				} else if (command[3].startsWith("-")) {
-					// player object loss
-					removeObjectiveForTeam(teamName, blockId, blockData);
+				if("surive".equalsIgnoreCase(command[3])){
+					//TODO add survive goal stuff
+				}else if("core".equalsIgnoreCase(command[3])){
+					//TODO add core goal stuff
+				}else if("time".equalsIgnoreCase(command[3])){
+					//TODO add time goal stuff
+				}else{//else it's just a blockid and blockdata.
+					String[] blockInfo = (command[3].substring(1)).split(",");
+					int blockId = Integer.parseInt(blockInfo[0]);
+					int blockData = 0;
+					if(blockInfo.length >= 2)
+						blockData = Integer.parseInt(blockInfo[1]);
+					
+					if (command[3].startsWith("+")) {
+						// player object retrieval
+						addObjectiveForTeam(teamName, blockId, blockData);
+					} else if (command[3].startsWith("-")) {
+						// player object loss
+						removeObjectiveForTeam(teamName, blockId, blockData);
+					}
 				}
 			} else if ("state".equals(command[2])) {
 				// team objective state event
