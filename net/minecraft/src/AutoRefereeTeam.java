@@ -39,37 +39,37 @@ public class AutoRefereeTeam {
 	}
 
 	public void resetHexColor() {
-		if ("§0".equals(this.colorString))
+		if ("\u00A70".equals(this.colorString))
 			this.hexColorCode = "EF000000";
-		else if ("§1".equals(this.colorString))
+		else if ("\u00A71".equals(this.colorString))
 			this.hexColorCode = "EF000088";
-		else if ("§2".equals(this.colorString))
+		else if ("\u00A72".equals(this.colorString))
 			this.hexColorCode = "EF008800";
-		else if ("§3".equals(this.colorString))
+		else if ("\u00A73".equals(this.colorString))
 			this.hexColorCode = "EF008888";
-		else if ("§4".equals(this.colorString))
+		else if ("\u00A74".equals(this.colorString))
 			this.hexColorCode = "EFAA0000";
-		else if ("§5".equals(this.colorString))
+		else if ("\u00A75".equals(this.colorString))
 			this.hexColorCode = "EF880088";
-		else if ("§6".equals(this.colorString))
+		else if ("\u00A76".equals(this.colorString))
 			this.hexColorCode = "EFDDAA00";
-		else if ("§7".equals(this.colorString))
+		else if ("\u00A77".equals(this.colorString))
 			this.hexColorCode = "EF888888";
-		else if ("§8".equals(this.colorString))
+		else if ("\u00A78".equals(this.colorString))
 			this.hexColorCode = "EF555555";
-		else if ("§9".equals(this.colorString))
+		else if ("\u00A79".equals(this.colorString))
 			this.hexColorCode = "EF3333AA";
-		else if ("§a".equals(this.colorString))
+		else if ("\u00A7a".equals(this.colorString))
 			this.hexColorCode = "EF33B533";
-		else if ("§b".equals(this.colorString))
+		else if ("\u00A7b".equals(this.colorString))
 			this.hexColorCode = "EF33B5B5";
-		else if ("§c".equals(this.colorString))
+		else if ("\u00A7c".equals(this.colorString))
 			this.hexColorCode = "EFB53333";
-		else if ("§d".equals(this.colorString))
+		else if ("\u00A7d".equals(this.colorString))
 			this.hexColorCode = "EFB533B5";
-		else if ("§e".equals(this.colorString))
+		else if ("\u00A7e".equals(this.colorString))
 			this.hexColorCode = "EFDDDD44";
-		else if ("§f".equals(this.colorString))
+		else if ("\u00A7f".equals(this.colorString))
 			this.hexColorCode = "EFCCCCCC";
 		else
 			this.hexColorCode = "EF3F3F3F";

@@ -523,7 +523,7 @@ public class RenderLiving extends Render
          		}
          	}
          	
-         	if(par2Str.startsWith("§") && autoReferee.registeredChannel)
+         	if(par2Str.startsWith("\u00A7") && autoReferee.registeredChannel)
          		par2Str = par2Str.substring(2);
          	//END CODE  
 

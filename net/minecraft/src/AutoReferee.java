@@ -447,13 +447,13 @@ public class AutoReferee {
 	}
 
 	public AutoRefereePlayer addPlayer(String name) {
-		AutoRefereePlayer apl = new AutoRefereePlayer(name.replaceAll("§.", ""));
+		AutoRefereePlayer apl = new AutoRefereePlayer(name.replaceAll("\u00A7.", ""));
 		players.put(name, apl);
 		return apl;
 	}
 
 	public AutoRefereePlayer getPlayer(String name) {
-		return players.get(name.replaceAll("§.", ""));
+		return players.get(name.replaceAll("\u00A7.", ""));
 	}
 
 	public AutoRefereeTeam addTeam(String name) {
