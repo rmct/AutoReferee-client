@@ -38,7 +38,7 @@ def get_minecraft_jar(version):
 	import urllib
 
 	print('+ Getting minecraft.jar for ' + version)
-	v = 'http://assets.minecraft.net/{:s}/minecraft.jar'.format(version.replace('.', '_'))
+	v = 'http://s3.amazonaws.com/Minecraft.Download/versions/{v:s}/{v:s}.jar'.format(v=version)
 
 	jardir = os.path.join('jars', 'bin')
 	try: os.makedirs(jardir)
