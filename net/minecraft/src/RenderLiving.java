@@ -244,7 +244,7 @@ public class RenderLiving extends Render
     {
         this.func_98190_a(par1EntityLiving);
 
-        if (!par1EntityLiving.getHasActivePotion())
+        if (!par1EntityLiving.isInvisible())
         {
             this.mainModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
         }
@@ -412,7 +412,7 @@ public class RenderLiving extends Render
 
             if (var10 < (double)(var12 * var12))
             {
-                String var13 = par1EntityLiving.func_96090_ax();
+                String var13 = par1EntityLiving.getTranslatedEntityName();
 
                 //START CODE
                 /*if (par1EntityLiving.isSneaking())
