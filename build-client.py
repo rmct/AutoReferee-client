@@ -9,7 +9,7 @@ FERNFLOWER = 'https://github.com/Zidonuke/Bukkit-MinecraftServer/blob/master/too
 LWJGL_VERSION = '2.8.5'
 lwjgl_jars = set(['jar/lwjgl.jar', 'jar/lwjgl_util.jar', 'jar/jinput.jar'])
 
-def get_mcp():
+def get_mcp(mcpzip=MCP_ZIP):
 	import zipfile
 	import urllib
 
@@ -17,34 +17,40 @@ def get_mcp():
 	shutil.rmtree('mcp', True)
 
 	print('+ Downloading newest mcp build')
-	urllib.urlretrieve(MCP_ZIP, 'mcp.zip')
+	urllib.urlretrieve(mcpzip, 'mcp.zip')
 
 	print('+ Extracting mcp')
+	os.makedirs('mcp')
 	with zipfile.ZipFile('mcp.zip', 'r') as z:
-		z.extractall()
+		z.extractall('mcp')
 	
-	folder, = glob.glob('Brunner-mcp-*')
-	shutil.move(folder, 'mcp')
 	os.unlink('mcp.zip')
 
 def get_client_version():
+	import re
+	import urllib
 	import ConfigParser
+
+	with open('net/minecraft/client/Minecraft.java', 'r') as mcf:
+		find = re.search('Minecraft (\d+(\.\d+)*)', mcf.read())
+		if find is not None: v = find.group(1)
+	
+	mcv = urllib.urlopen('https://raw.github.com/MinecraftForge/FML/master/mc_versions.cfg')
 	config = ConfigParser.SafeConfigParser()
+	config.readfp(mcv)
+	
+	return v, config.get(v, 'client_url'), config.get(v, 'mcp_url')
 
-	config.read('conf/version.cfg')
-	return config.get('VERSION', 'ClientVersion')
-
-def get_minecraft_jar(version):
+def get_minecraft_jar(version=None, jarpath=None):
 	import urllib
 
 	print('+ Getting minecraft.jar for ' + version)
-	v = 'http://s3.amazonaws.com/Minecraft.Download/versions/{v:s}/{v:s}.jar'.format(v=version)
 
 	jardir = os.path.join('jars', 'bin')
 	try: os.makedirs(jardir)
 	except OSError: pass
 
-	urllib.urlretrieve(v, 'jars/bin/minecraft.jar')
+	urllib.urlretrieve(jarpath, 'jars/bin/minecraft.jar')
 
 	print('+ Downloading fernflower.jar')
 	urllib.urlretrieve(FERNFLOWER, 'runtime/bin/fernflower.jar')
@@ -118,16 +124,15 @@ def add_changes(src, dst):
 
 if __name__ == '__main__':
 	os.chdir(os.path.dirname(os.path.realpath(__file__)))
+	VERSION, CLIENT_JAR, MCP_ZIP = get_client_version()
 
-	get_mcp()
+	get_mcp(mcpzip=MCP_ZIP)
 	os.chdir('mcp')
 	
 	# create a dummy init to treat mcp as a python module
 	with open('__init__.py', 'w') as f: pass
 	
-	CLIENT_VERSION = get_client_version()
-	get_minecraft_jar(CLIENT_VERSION)
-
+	get_minecraft_jar(version=VERSION, jarpath=CLIENT_JAR)
 	decompile()
 
 	for d in src_dirs:
@@ -136,4 +141,4 @@ if __name__ == '__main__':
 	
 	recompile()
 	package(os.path.join('reobf', 'minecraft'), 
-		os.path.join('..', 'AutoReferee-client-' + CLIENT_VERSION))
+		os.path.join('..', 'AutoReferee-client-' + VERSION))
