@@ -142,6 +142,5 @@ public class AutoRefereeTeam {
 		}
 		return list;
 	}
-
 }
 // END CODE

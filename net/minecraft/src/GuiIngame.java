@@ -643,6 +643,8 @@ public class GuiIngame extends Gui
      	if (!AutoReferee.get().showPlayerList(updateCounter) && !AutoReferee.get().showTeamList(updateCounter)) {
      		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
      			AutoRefereeHUDRFW.renderGeneralHUD(this.mc);
+     		if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))
+     			AutoRefereeHUDUHC.renderGeneralHUD(this.mc);
      	}
      	//END CODE
 		

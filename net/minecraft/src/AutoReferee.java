@@ -6,8 +6,14 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.lwjgl.opengl.GL11;
@@ -18,6 +24,8 @@ import net.minecraft.client.Minecraft;
 public class AutoReferee {
 	public static final String CHANNEL = "autoref:referee";
 	public static final String DELIMITER = "\\|";
+	
+	public static final int MAX_NUMBER_OF_PLAYERS_ON_SCREEN = 4;
 
 	public static final int AUTOREFEREE_ICON_NUMBER_IN_WIDTH = 2;
 	public static final int AUTOREFEREE_ICON_NUMBER_IN_HEIGHT = 2;
@@ -36,7 +44,7 @@ public class AutoReferee {
 
 	// public static final int LIST_DISPLAY_TICKS = 50;
 	public static final int MESSAGE_DISPLAY_TICKS = 60;
-	public static final int TEAM_LIST_CYCLE = 200;
+	public static final int TEAM_LIST_CYCLE = 150;
 
 	private static AutoReferee instance = new AutoReferee();
 	private RenderItem renderItem;
@@ -69,6 +77,7 @@ public class AutoReferee {
 	public boolean nightVision;
 	public boolean swapTeams;
 	public boolean registeredChannel;
+	private List<AutoRefereePlayer> closestPlayers;
 
 	public AutoReferee() {
 		renderItem = new RenderItem();
@@ -97,6 +106,7 @@ public class AutoReferee {
 		this.nightVision = false;
 		this.swapTeams = false;
 		this.registeredChannel = false;
+		this.closestPlayers = null;
 	}
 
 	public static AutoReferee get() {
@@ -193,7 +203,9 @@ public class AutoReferee {
 			String teamName = command[1];
 			if ("init".equals(command[2]) && !teams.containsKey(teamName))
 				addTeam(teamName);
-			if ("name".equals(command[2])) {
+			else if ("destroy".equals(command[2]))
+				removeTeam(teamName);
+			else if ("name".equals(command[2])) {
 				// team name event
 				changeTeamName(teamName, command[3]);
 			} else if ("color".equals(command[2])) {
@@ -396,7 +408,10 @@ public class AutoReferee {
 	}
 
 	public void setTime(String timestamp) {
-		String[] times = timestamp.split(",");
+		String[] times;
+		times = timestamp.split(",");
+		if(timestamp.contains(":"))
+			times = timestamp.split(":");
 		numberOfHours = Integer.parseInt(times[0]);
 		numberOfMinutes = Integer.parseInt(times[1]);
 		numberOfSeconds = Integer.parseInt(times[2]);
@@ -461,6 +476,11 @@ public class AutoReferee {
 		teams.put(name, at);
 		return at;
 	}
+	
+	public void removeTeam(String name) {
+		if (teams.containsKey(name))
+			teams.remove(name);
+	}
 
 	public void changeTeamName(String oldName, String newName) {
 		AutoRefereeTeam at = teams.get(oldName);
@@ -497,12 +517,18 @@ public class AutoReferee {
 			return;
 		if (apl == null)
 			apl = addPlayer(playerName);
+
+		AutoRefereeTeam atOld = apl.getTeam();
 		apl.setTeam(at);
 	}
 
 	public void removePlayerFromTeam(String playerName, String teamName) {
-		if (players.containsKey(playerName))
+		if (players.containsKey(playerName)){
+			AutoRefereePlayer apl = players.get(playerName);
+			AutoRefereeTeam atOld = apl.getTeam();
+			apl.setTeam(null);
 			players.remove(playerName);
+		}
 	}
 
 	public void changeKillsOfPlayer(String name, int kills) {
@@ -659,6 +685,17 @@ public class AutoReferee {
 				apl.setDimension(dimension);
 		}
 	}
+	
+	public String getNumberOfPlayersRemainingString(){
+		int totalPlayers = 0;
+		int playersAlive = 0;
+		for(AutoRefereePlayer apl : players.values()){
+			++totalPlayers;
+			if (apl.getHealth() != 0)
+				++playersAlive;
+		}
+		return playersAlive + " of " + totalPlayers + " remaining";
+	}
 
 	public ArrayList<AutoRefereePlayer> getPlayersOfTeam(AutoRefereeTeam at) {
 		ArrayList<AutoRefereePlayer> returnList = new ArrayList<AutoRefereePlayer>();
@@ -679,17 +716,18 @@ public class AutoReferee {
 			iterator.next();
 			if (iterator.hasNext())
 				return iterator.next();
-		} else if ("UHC".equalsIgnoreCase(gameType)) {
+		} /*else if ("UHC".equalsIgnoreCase(gameType)) {
 			int teamNumber = (int) ((int) (tick / TEAM_LIST_CYCLE) % Math.ceil(((double) teams.size() / 2)));
 			for (int i = 0; i < teamNumber * 2; ++i)
-				iterator.next();
-			if (this.swapTeams)
+				if (iterator.hasNext())
+					iterator.next();
+			if (this.swapTeams && iterator.hasNext())
 				return iterator.next();
 			if (iterator.hasNext())
 				iterator.next();
 			if (iterator.hasNext())
 				return iterator.next();
-		}
+		}*/
 		return null;
 	}
 
@@ -703,19 +741,94 @@ public class AutoReferee {
 			iterator.next();
 			if (iterator.hasNext())
 				return iterator.next();
-		} else if ("UHC".equalsIgnoreCase(gameType)) {
+		} /*else if ("UHC".equalsIgnoreCase(gameType)) {
 			int teamNumber = (int) ((int) (tick / TEAM_LIST_CYCLE) % Math.ceil(((double) teams.size() / 2)));
 			for (int i = 0; i < teamNumber * 2; ++i)
-				iterator.next();
-			if (!this.swapTeams)
+				if (iterator.hasNext())
+					iterator.next();
+			if (!this.swapTeams && iterator.hasNext())
 				return iterator.next();
 			if (iterator.hasNext())
 				iterator.next();
 			if (iterator.hasNext())
 				return iterator.next();
-		}
+		}*/
 		return null;
 	}
+	
+	public ArrayList<AutoRefereePlayer> getCyclingPlayers(int tick, boolean FromTickBefore){
+		//RETURN PLAYERS DEPENDING ON TIME.
+		if(closestPlayers.size() == 0 && players.size() > MAX_NUMBER_OF_PLAYERS_ON_SCREEN && players.size() <= 2 * MAX_NUMBER_OF_PLAYERS_ON_SCREEN){
+			if (FromTickBefore)
+				tick = 0;
+			else
+				tick = TEAM_LIST_CYCLE;
+		}
+		if(players.size() > 0 && (FromTickBefore || players.size() > MAX_NUMBER_OF_PLAYERS_ON_SCREEN)){
+			ArrayList<AutoRefereePlayer> rightPlayers = new ArrayList<AutoRefereePlayer>();
+			
+			int firstPlayerNumber = (int) ((int) (tick / TEAM_LIST_CYCLE) % Math.ceil((double)players.size()/MAX_NUMBER_OF_PLAYERS_ON_SCREEN)) * MAX_NUMBER_OF_PLAYERS_ON_SCREEN;
+			firstPlayerNumber -= closestPlayers.size();
+			if(firstPlayerNumber < 0)
+				firstPlayerNumber = 0;
+			
+			int lastPlayerNumber = (firstPlayerNumber + MAX_NUMBER_OF_PLAYERS_ON_SCREEN-1);
+			
+			int i = 0;
+			for(AutoRefereePlayer apl : players.values()){
+				if(closestPlayers.contains(apl))
+					continue;
+				if(firstPlayerNumber <= i && i <= lastPlayerNumber)
+					rightPlayers.add(apl);
+				if(i >= lastPlayerNumber)
+					break;
+				++i;
+			}
+			return rightPlayers;
+		}else
+			return new ArrayList<AutoRefereePlayer>();
+	}
+	
+	public List<AutoRefereePlayer> getClosestPlayers(int tick){
+		// RETURN CLOSET PLAYERS
+		if(closestPlayers == null || tick % (TEAM_LIST_CYCLE) == 0){
+			HashMap<AutoRefereePlayer,Double> distances = new HashMap<AutoRefereePlayer,Double>();
+			Iterator<List> allPlayersIterator = this.mc.theWorld.playerEntities.iterator();
+			while(allPlayersIterator.hasNext()){
+				EntityPlayer pl = (EntityPlayer) allPlayersIterator.next();
+				if(pl != this.mc.thePlayer && players.containsKey(pl.username)){
+					double dist = pl.getDistanceSqToEntity(this.mc.thePlayer);
+					AutoRefereePlayer apl = players.get(pl.username);
+					distances.put(apl, dist);
+				}
+			}
+			closestPlayers = getClosestKPlayers(MAX_NUMBER_OF_PLAYERS_ON_SCREEN,distances);
+		}
+		return closestPlayers;
+	}
+	
+	public List<AutoRefereePlayer> getClosestKPlayers(int k, HashMap<AutoRefereePlayer,Double> distances){
+		List<AutoRefereePlayer> players = new ArrayList<AutoRefereePlayer>(); 
+		players.addAll(distances.keySet());
+		Collections.sort(players, new DistanceComparator(distances));
+		if(distances.size() < k)
+			k = distances.size();
+		players = players.subList(0, k);
+		return players;
+	}
+	
+	private static class DistanceComparator implements Comparator<AutoRefereePlayer>{
+		HashMap<AutoRefereePlayer,Double> distances = new HashMap<AutoRefereePlayer,Double>();
+
+		public DistanceComparator(HashMap<AutoRefereePlayer,Double> distances){ 
+			this.distances = distances; 
+		}
+
+		public int compare(AutoRefereePlayer apl1, AutoRefereePlayer apl2)
+		{
+			return distances.get(apl1) < distances.get(apl2) ? -1 : 1;
+		}
+	};
 
 	public String getGameType() {
 		return gameType;
@@ -807,7 +920,7 @@ public class AutoReferee {
 	public void renderItem(int itemId, int itemDataValue, int itemAmount, int x, int y, float scale) {
 		renderSettingsStart(x, y, 0, scale);
 		ItemStack is = new ItemStack(itemId, itemAmount, itemDataValue);
-		renderItem.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, is, 0, 0);
+		renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, is, 0, 0);
 		renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, is, 0, 0);
 		renderSettingsEnd();
 		GL11.glDisable(GL11.GL_LIGHTING);
