@@ -55,7 +55,7 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 
 	private static void renderTeamInPlayerList(List<AutoRefereePlayer> players, String name, float scaleName, Minecraft mc) {
 		AutoReferee autoReferee = AutoReferee.get();
-		if(players.size() > 0){
+		if(players.size() > 0 && name != ""){
 			mc.ingameGUI.drawRect(0, 0, PLAYER_LIST_BOX_WIDTH, PLAYER_LIST_PLAYERS_Y_OFFSET, Long.valueOf("EF3F3F3F", 16).intValue());
 			autoReferee.renderCenteredString(name, PLAYER_LIST_BOX_WIDTH / 2, PLAYER_LIST_TEAM_OFFSET, scaleName, 16777215, true);
 		}
@@ -71,6 +71,7 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 			}
 			GL11.glTranslatef(0, PLAYER_LIST_PLAYERS_Y_OFFSET + i * PLAYER_LIST_PLAYER_HEIGHT, 0);
 			mc.ingameGUI.drawRect(0, 0, PLAYER_LIST_BOX_WIDTH, PLAYER_LIST_PLAYER_HEIGHT, apl.getTeam().getBoxColor());
+			GL11.glTranslatef(0, 3, 0);
 			autoReferee.renderString(apl.getName(), PLAYER_LIST_NAME_OFFSET, 0, 1F, textcolor, true);
 			autoReferee.renderString(apl.getAccuracyString(), PLAYER_LIST_KILLS_OFFSET, 0, 1F, textcolor, true);
 			autoReferee.renderString(apl.getKills() + "", PLAYER_LIST_KILLS_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, textcolor, true);
@@ -79,10 +80,15 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 			autoReferee.renderHearts(health, PLAYER_LIST_HEALTH_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, true);
 			autoReferee.renderArmor(armor, PLAYER_LIST_ARMOR_X_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F);
 			autoReferee.renderSkinHead(apl.getName(), PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
-			int teamNameYOffset = PLAYER_LIST_TEAM_NAME_OFFSET;
-			if(armor == 0)
-				teamNameYOffset = PLAYER_LIST_ARMOR_Y_OFFSET;
-			autoReferee.renderString("Team: " + apl.getTeam().getName(), PLAYER_LIST_NAME_OFFSET, teamNameYOffset, 0.9F, textcolor, true);
+			if(!autoReferee.isFFA()){
+				int teamNameYOffset = PLAYER_LIST_TEAM_NAME_OFFSET;
+				if(armor == 0)
+					teamNameYOffset = PLAYER_LIST_ARMOR_Y_OFFSET;
+				String teamName = apl.getTeam().getName();
+				if (teamName.length() > 16)
+					teamName = teamName.substring(0, 16);
+				autoReferee.renderString("Team: " + teamName, PLAYER_LIST_NAME_OFFSET, teamNameYOffset + 2, 0.7F, textcolor, true);
+			}
 			
 			// GOLDEN BARS
 			if (apl.getItemAmount(266, 0) != 0) {
@@ -126,113 +132,6 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 			GL11.glPopMatrix();
 		}
 	}
-	
-	/*public static void renderPlayerList2(Minecraft mc) {
-		ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		AutoReferee autoReferee = AutoReferee.get();
-		float scale = (float) (scaledResolution.getScaledHeight() - 45) / (float) PLAYER_LIST_BOX_HEIGHT;
-		scale = Math.min(scale, (float) (scaledResolution.getScaledWidth()) / (float) (PLAYER_LIST_BOX_WIDTH * 2 + 20));
-		float height = (scaledResolution.getScaledHeight() - 35) / 2 - PLAYER_LIST_BOX_HEIGHT / 2 * scale;
-		height = Math.max(10, height);
-		AutoRefereeTeam at1 = autoReferee.getLeftTeam(mc.ingameGUI.updateCounter);
-		AutoRefereeTeam at2 = autoReferee.getRightTeam(mc.ingameGUI.updateCounter);
-		// scale down if too large name
-		float widthName = 0, widthName2 = 0;
-		float scaleName = 1.7F;
-		if (at1 != null)
-			widthName = mc.fontRenderer.getStringWidth(at1.getName()) * scaleName;
-		if (at2 != null)
-			widthName2 = mc.fontRenderer.getStringWidth(at2.getName()) * scaleName;
-		if (widthName2 > widthName)
-			widthName = widthName2;
-		if (widthName > (PLAYER_LIST_BOX_WIDTH - PLAYER_LIST_BOX_PADDING * 2))
-			scaleName = (PLAYER_LIST_BOX_WIDTH - PLAYER_LIST_BOX_PADDING * 2) / widthName * scaleName;
-
-		if (at1 != null) {
-			GL11.glPushMatrix();
-			GL11.glTranslatef(scaledResolution.getScaledWidth() / 2 - PLAYER_LIST_BOX_WIDTH * scale, height, 0);
-			GL11.glScalef(scale, scale, scale);
-			renderTeamInPlayerList(at1, scaleName, mc);
-			GL11.glPopMatrix();
-		}
-		if (at2 != null) {
-			GL11.glPushMatrix();
-			GL11.glTranslatef(scaledResolution.getScaledWidth() / 2, height, 0);
-			GL11.glScalef(scale, scale, scale);
-			renderTeamInPlayerList(at2, scaleName, mc);
-			GL11.glPopMatrix();
-		}
-	}
-
-	private static void renderTeamInPlayerList2(AutoRefereeTeam at, float scaleName, Minecraft mc) {
-		AutoReferee autoReferee = AutoReferee.get();
-		String name = at.getName();
-		mc.ingameGUI.drawRect(0, 0, PLAYER_LIST_BOX_WIDTH, PLAYER_LIST_BOX_HEIGHT, at.getBoxColor());
-		autoReferee.renderCenteredString(name, PLAYER_LIST_BOX_WIDTH / 2, PLAYER_LIST_TEAM_OFFSET, scaleName, 16777215, true);
-		int i = 0, j;
-		int health, armor, height;
-		for (AutoRefereePlayer apl : autoReferee.getPlayersOfTeam(at)) {
-			GL11.glPushMatrix();
-			int textcolor = 16777215;
-			if (!apl.getLoggedIn() || apl.getHealth() == 0) {
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glColor4f(0.5F, 0.5F, 0.5F, 1.0F);
-				textcolor = (256 << 24) + (128 << 16) + (128 << 8) + 128;
-			}
-			GL11.glTranslatef(0, PLAYER_LIST_PLAYERS_Y_OFFSET + i * PLAYER_LIST_PLAYER_HEIGHT, 0);
-			autoReferee.renderString(apl.getName(), PLAYER_LIST_NAME_OFFSET, 0, 1F, textcolor, true);
-			autoReferee.renderString(apl.getAccuracyString(), PLAYER_LIST_KILLS_OFFSET, 0, 1F, textcolor, true);
-			autoReferee.renderString(apl.getKills() + "", PLAYER_LIST_KILLS_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, textcolor, true);
-			health = apl.getHealth();
-			armor = apl.getArmor();
-			autoReferee.renderHearts(health, PLAYER_LIST_HEALTH_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, true);
-			autoReferee.renderArmor(armor, PLAYER_LIST_ARMOR_X_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F);
-			autoReferee.renderSkinHead(apl.getName(), PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
-			autoReferee.renderString("Team: " + apl.getTeam().getName(), PLAYER_LIST_NAME_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET+10, 1F, textcolor, true);
-			
-			// GOLDEN BARS
-			if (apl.getItemAmount(266, 0) != 0) {
-				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_KILL_STREAK_X_OFFSET, PLAYER_LIST_KILL_STREAK_Y_OFFSET, PLAYER_LIST_KILL_STREAK_X_OFFSET + (int) (16 * scale), PLAYER_LIST_KILL_STREAK_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(266, 0, apl.getItemAmount(266, 0), PLAYER_LIST_KILL_STREAK_X_OFFSET, PLAYER_LIST_KILL_STREAK_Y_OFFSET, scale);
-			}
-			// ENCHANTED GOLDEN APPLES
-			/*if (apl.getItemAmount(322, 1) != 0) {
-				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), PLAYER_LIST_DOMINATION_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				GL11.glEnable(GL11.GL_ALPHA);
-				autoReferee.renderItem(322, 1, apl.getItemAmount(322, 1), PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, scale);
-			// NORMAL GOLDEN APPLES
-			} else*//* 
-			//NORMAL GOLDEN APPLES. NOTCH APPLES DON'T RENDER VERY WELL SO ARE DISPLAYED AS NORMAL APPLE
-			if (apl.getItemAmount(322, 0) + apl.getItemAmount(322, 1) != 0) {
-				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), PLAYER_LIST_DOMINATION_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(322, 0, apl.getItemAmount(322, 0) + apl.getItemAmount(322, 1), PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, scale);
-			}
-
-			// DIMENSION
-			int dimensionId = 0;
-			if ("nether".equalsIgnoreCase(apl.getDimension())) {dimensionId = 90;}
-			else if ("end".equalsIgnoreCase(apl.getDimension())) {dimensionId = 121;}
-			if (dimensionId != 0){
-				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), PLAYER_LIST_HEALTH_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(dimensionId, 0, PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, scale);
-			}
-
-			j = 0;
-			for (AutoRefereeObjective obj : apl.getObjectives()) {
-				mc.ingameGUI.drawRect(PLAYER_LIST_OBJECTIVES_X_OFFSET + PLAYER_LIST_OBJECTIVE_OFFSET * j - PLAYER_LIST_OBJ_BORDER_WIDTH, PLAYER_LIST_OBJECTIVES_Y_OFFSET - PLAYER_LIST_OBJ_BORDER_WIDTH, PLAYER_LIST_OBJECTIVES_X_OFFSET + PLAYER_LIST_OBJECTIVE_OFFSET * j + PLAYER_LIST_OBJ_RECT_WIDTH + PLAYER_LIST_OBJ_BORDER_WIDTH, PLAYER_LIST_OBJECTIVES_Y_OFFSET + PLAYER_LIST_OBJ_RECT_WIDTH + PLAYER_LIST_OBJ_BORDER_WIDTH, 0x33FFFFFF);
-				autoReferee.renderItem(obj.getId(), obj.getData(), PLAYER_LIST_OBJECTIVES_X_OFFSET + PLAYER_LIST_OBJECTIVE_OFFSET * j, PLAYER_LIST_OBJECTIVES_Y_OFFSET, 0.9F);
-				++j;
-			}
-			GL11.glDisable(GL11.GL_LIGHTING);
-			++i;
-			GL11.glPopMatrix();
-		}
-	}*/
 
 	public static void renderTeamList(Minecraft mc) {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -323,6 +222,15 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 		mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, Long.valueOf("EF888888", 16).intValue());
 		autoReferee.renderCenteredString(stringRemainingPlayers, xOffset + width / 2, 1, scale, 16777215, false);
 		
+		
+		//Render Closest Player
+		List<AutoRefereePlayer> closestPlayers = autoReferee.getClosestPlayers(mc.ingameGUI.updateCounter);
+		if (closestPlayers.size() >= 1){
+			GL11.glPushMatrix();
+			GL11.glTranslatef((scaledResolution.getScaledWidth() - PLAYER_LIST_BOX_WIDTH)/2, scaledResolution.getScaledHeight() - PLAYER_LIST_PLAYERS_Y_OFFSET - PLAYER_LIST_PLAYER_HEIGHT, 0);
+			renderTeamInPlayerList(closestPlayers.subList(0, 1), "", 1.0F, mc);
+			GL11.glPopMatrix();
+		}
 	}
 }
 //END CODE

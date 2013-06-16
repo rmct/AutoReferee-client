@@ -78,6 +78,8 @@ public class AutoReferee {
 	public boolean swapTeams;
 	public boolean registeredChannel;
 	private List<AutoRefereePlayer> closestPlayers;
+	private int closestPlayersUpdateTick;
+	private boolean ffa;
 
 	public AutoReferee() {
 		renderItem = new RenderItem();
@@ -107,6 +109,8 @@ public class AutoReferee {
 		this.swapTeams = false;
 		this.registeredChannel = false;
 		this.closestPlayers = null;
+		this.ffa = false;
+		this.closestPlayersUpdateTick = 0;
 	}
 
 	public static AutoReferee get() {
@@ -146,7 +150,7 @@ public class AutoReferee {
 			// handle player events
 			String playerName = command[1];
 			if (!players.containsKey(playerName))
-				addPlayer(playerName);
+				return;
 
 			if ("goal".equals(command[2])) {
 				// player object events
@@ -302,6 +306,15 @@ public class AutoReferee {
 					nightVision = !nightVision;
 			} else if ("gametype".equals(command[2])) {
 				gameType = command[3].toUpperCase();
+			} else if("gameplay".equals(command[2])){
+				if("FFA".equals(command[3])){
+					if(command.length >= 4){
+						this.ffa = (command[4] == "on");
+					}else
+						this.ffa = !ffa;
+				}else if("respawn".equals(command[3])){
+					//TODO add respawn gameplay behaviour.
+				}
 			}
 		}
 	}
@@ -502,6 +515,9 @@ public class AutoReferee {
 		AutoRefereePlayer apl = players.get(name);
 		if (apl != null)
 			apl.setHealth(hp);
+		
+		if(hp == 0 && "UHC".equals(this.gameType))
+			players.remove(apl);
 	}
 
 	public void changeArmorOfPlayer(String name, int armor) {
@@ -528,6 +544,9 @@ public class AutoReferee {
 			AutoRefereeTeam atOld = apl.getTeam();
 			apl.setTeam(null);
 			players.remove(playerName);
+			if(closestPlayers.contains(apl)){
+				closestPlayers.remove(apl);
+			}
 		}
 	}
 
@@ -664,6 +683,10 @@ public class AutoReferee {
 			apl.setCapeUrl("");
 		}
 	}
+	
+	public boolean isFFA(){
+		return this.ffa;
+	}
 
 	public void setLoggedIn(String playerName, boolean loggedIn) {
 		AutoRefereePlayer apl = getPlayer(playerName);
@@ -687,14 +710,15 @@ public class AutoReferee {
 	}
 	
 	public String getNumberOfPlayersRemainingString(){
-		int totalPlayers = 0;
+		/*int totalPlayers = 0;
 		int playersAlive = 0;
 		for(AutoRefereePlayer apl : players.values()){
 			++totalPlayers;
 			if (apl.getHealth() != 0)
 				++playersAlive;
 		}
-		return playersAlive + " of " + totalPlayers + " remaining";
+		return playersAlive + " of " + totalPlayers + " remaining";*/
+		return players.size() + (players.size() == 1 ?  " player remaining" : " players remaining");
 	}
 
 	public ArrayList<AutoRefereePlayer> getPlayersOfTeam(AutoRefereeTeam at) {
@@ -790,21 +814,29 @@ public class AutoReferee {
 	}
 	
 	public List<AutoRefereePlayer> getClosestPlayers(int tick){
-		// RETURN CLOSET PLAYERS
+		// RETURN CLOSEST PLAYERS
 		if(closestPlayers == null || tick % (TEAM_LIST_CYCLE) == 0){
-			HashMap<AutoRefereePlayer,Double> distances = new HashMap<AutoRefereePlayer,Double>();
-			Iterator<List> allPlayersIterator = this.mc.theWorld.playerEntities.iterator();
-			while(allPlayersIterator.hasNext()){
-				EntityPlayer pl = (EntityPlayer) allPlayersIterator.next();
-				if(pl != this.mc.thePlayer && players.containsKey(pl.username)){
-					double dist = pl.getDistanceSqToEntity(this.mc.thePlayer);
-					AutoRefereePlayer apl = players.get(pl.username);
-					distances.put(apl, dist);
-				}
-			}
-			closestPlayers = getClosestKPlayers(MAX_NUMBER_OF_PLAYERS_ON_SCREEN,distances);
+			updateClosestPlayers();
+			closestPlayersUpdateTick = tick;
+		}else if(tick - closestPlayersUpdateTick > TEAM_LIST_CYCLE){
+			updateClosestPlayers();
+			closestPlayersUpdateTick = tick - (tick % TEAM_LIST_CYCLE);
 		}
 		return closestPlayers;
+	}
+	
+	public void updateClosestPlayers(){
+		HashMap<AutoRefereePlayer,Double> distances = new HashMap<AutoRefereePlayer,Double>();
+		Iterator<List> allPlayersIterator = this.mc.theWorld.playerEntities.iterator();
+		while(allPlayersIterator.hasNext()){
+			EntityPlayer pl = (EntityPlayer) allPlayersIterator.next();
+			if(pl != this.mc.thePlayer && players.containsKey(pl.username)){
+				double dist = pl.getDistanceSqToEntity(this.mc.thePlayer);
+				AutoRefereePlayer apl = players.get(pl.username);
+				distances.put(apl, dist);
+			}
+		}
+		closestPlayers = getClosestKPlayers(MAX_NUMBER_OF_PLAYERS_ON_SCREEN,distances);
 	}
 	
 	public List<AutoRefereePlayer> getClosestKPlayers(int k, HashMap<AutoRefereePlayer,Double> distances){
