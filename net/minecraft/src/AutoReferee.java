@@ -544,7 +544,7 @@ public class AutoReferee {
 			AutoRefereeTeam atOld = apl.getTeam();
 			apl.setTeam(null);
 			players.remove(playerName);
-			if(closestPlayers.contains(apl)){
+			if(closestPlayers != null && closestPlayers.contains(apl)){
 				closestPlayers.remove(apl);
 			}
 		}
@@ -781,6 +781,11 @@ public class AutoReferee {
 	}
 	
 	public ArrayList<AutoRefereePlayer> getCyclingPlayers(int tick, boolean FromTickBefore){
+		if(closestPlayers == null){
+			updateClosestPlayers();
+			closestPlayersUpdateTick = tick;
+		}
+		
 		//RETURN PLAYERS DEPENDING ON TIME.
 		if(closestPlayers.size() == 0 && players.size() > MAX_NUMBER_OF_PLAYERS_ON_SCREEN && players.size() <= 2 * MAX_NUMBER_OF_PLAYERS_ON_SCREEN){
 			if (FromTickBefore)
