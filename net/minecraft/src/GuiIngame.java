@@ -390,7 +390,7 @@ public class GuiIngame extends Gui
 
         String var35;
 
-        if (this.mc.gameSettings.heldItemTooltips)
+        if (this.mc.gameSettings.heldItemTooltips && !this.mc.gameSettings.hideGUI)
         {
             this.mc.mcProfiler.startSection("toolHighlight");
 
