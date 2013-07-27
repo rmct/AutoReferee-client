@@ -89,12 +89,22 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 					teamName = teamName.substring(0, 16);
 				autoReferee.renderString("Team: " + teamName, PLAYER_LIST_NAME_OFFSET, teamNameYOffset + 2, 0.7F, textcolor, true);
 			}
+
+			// DIMENSION
+			int dimensionId = 0;
+			if ("nether".equalsIgnoreCase(apl.getDimension())) {dimensionId = 90;}
+			else if ("end".equalsIgnoreCase(apl.getDimension())) {dimensionId = 121;}
+			if (dimensionId != 0){
+				float scale = 0.9F;
+				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, 0, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), (int) (16 * scale), 0x33FFFFFF);
+				autoReferee.renderItem(dimensionId, 0, PLAYER_LIST_DOMINATION_X_OFFSET, 0, scale);
+			}
 			
 			// GOLDEN BARS
 			if (apl.getItemAmount(266, 0) != 0) {
 				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_KILL_STREAK_X_OFFSET, PLAYER_LIST_KILL_STREAK_Y_OFFSET, PLAYER_LIST_KILL_STREAK_X_OFFSET + (int) (16 * scale), PLAYER_LIST_KILL_STREAK_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(266, 0, apl.getItemAmount(266, 0), PLAYER_LIST_KILL_STREAK_X_OFFSET, PLAYER_LIST_KILL_STREAK_Y_OFFSET, scale);
+				mc.ingameGUI.drawRect(PLAYER_LIST_KILL_STREAK_X_OFFSET, (int) (16 * scale), PLAYER_LIST_KILL_STREAK_X_OFFSET + (int) (16 * scale), 2 * (int) (16 * scale), 0x33FFFFFF);
+				autoReferee.renderItem(266, 0, apl.getItemAmount(266, 0), PLAYER_LIST_KILL_STREAK_X_OFFSET, (int) (16 * scale), scale);
 			}
 			// ENCHANTED GOLDEN APPLES
 			/*if (apl.getItemAmount(322, 1) != 0) {
@@ -107,18 +117,8 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 			//NORMAL GOLDEN APPLES. NOTCH APPLES DON'T RENDER VERY WELL SO ARE DISPLAYED AS NORMAL APPLE
 			if (apl.getItemAmount(322, 0) + apl.getItemAmount(322, 1) != 0) {
 				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), PLAYER_LIST_DOMINATION_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(322, 0, apl.getItemAmount(322, 0) + apl.getItemAmount(322, 1), PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_DOMINATION_Y_OFFSET, scale);
-			}
-
-			// DIMENSION
-			int dimensionId = 0;
-			if ("nether".equalsIgnoreCase(apl.getDimension())) {dimensionId = 90;}
-			else if ("end".equalsIgnoreCase(apl.getDimension())) {dimensionId = 121;}
-			if (dimensionId != 0){
-				float scale = 0.9F;
-				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), PLAYER_LIST_HEALTH_Y_OFFSET + (int) (16 * scale), 0x33FFFFFF);
-				autoReferee.renderItem(dimensionId, 0, PLAYER_LIST_DOMINATION_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, scale);
+				mc.ingameGUI.drawRect(PLAYER_LIST_DOMINATION_X_OFFSET, 2*(int) (16 * scale), PLAYER_LIST_DOMINATION_X_OFFSET + (int) (16 * scale), 3* (int) (16 * scale), 0x33FFFFFF);
+				autoReferee.renderItem(322, 0, apl.getItemAmount(322, 0) + apl.getItemAmount(322, 1), PLAYER_LIST_DOMINATION_X_OFFSET, 2*(int) (16 * scale), scale);
 			}
 
 			j = 0;
