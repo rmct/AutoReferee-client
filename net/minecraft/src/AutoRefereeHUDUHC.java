@@ -228,6 +228,8 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 		if (closestPlayers.size() >= 1){
 			GL11.glPushMatrix();
 			GL11.glTranslatef((scaledResolution.getScaledWidth() - PLAYER_LIST_BOX_WIDTH)/2, scaledResolution.getScaledHeight() - PLAYER_LIST_PLAYERS_Y_OFFSET - PLAYER_LIST_PLAYER_HEIGHT, 0);
+			if(!AutoReferee.get().getMinecraft().gameSettings.hideGUI)
+				GL11.glTranslatef(0, -22, 0);
 			renderTeamInPlayerList(closestPlayers.subList(0, 1), "", 1.0F, mc);
 			GL11.glPopMatrix();
 		}

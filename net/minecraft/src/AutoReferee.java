@@ -318,6 +318,10 @@ public class AutoReferee {
 			}
 		}
 	}
+	
+	public Minecraft getMinecraft(){
+		return mc;
+	}
 
 	public boolean hasMessage(int tick) {
 		if (lastMessage != null && lastMessage.tick(tick) != 0)
