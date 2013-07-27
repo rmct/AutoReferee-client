@@ -378,6 +378,8 @@ public class AutoReferee {
 	}
 
 	public void updateCountdown(int tick) {
+		if(countdown == 0)
+			countingDown = false;
 		if (tick - lastTick >= 20) {
 			--countdown;
 			this.lastTick += 20;
