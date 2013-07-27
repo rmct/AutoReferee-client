@@ -316,6 +316,10 @@ public class AutoReferee {
 					//TODO add respawn gameplay behaviour.
 				}
 			}
+		} else if ("plugin".equals(command[0])) {
+			if ("ucp".equals(command[2])) {
+				updateClosestPlayers();
+			}
 		}
 	}
 	
