@@ -517,11 +517,13 @@ public class AutoReferee {
 
 	public void changeHealthOfPlayer(String name, int hp) {
 		AutoRefereePlayer apl = players.get(name);
-		if (apl != null)
-			apl.setHealth(hp);
+		if (apl == null)
+			return;
 		
-		if(hp == 0 && "UHC".equals(this.gameType))
-			players.remove(apl);
+		apl.setHealth(hp);
+		
+		if(hp == 0 && "UHC".equalsIgnoreCase(this.gameType))
+			players.remove(name);
 	}
 
 	public void changeArmorOfPlayer(String name, int armor) {
