@@ -12,6 +12,14 @@ gui.down=Down
 gui.yes=Yes
 gui.no=No
 
+translation.test.none=Hello, world!
+translation.test.complex=Prefix, %s%2$s again %s and %1$s lastly %s and also %1$s again!
+translation.test.escape=%%s %%%s %%%%s %%%%%s
+translation.test.invalid=hi %
+translation.test.invalid2=hi %  s
+translation.test.args=%s %s
+translation.test.world=world
+
 menu.singleplayer=Singleplayer
 menu.multiplayer=Multiplayer
 menu.online=Minecraft Realms
@@ -131,20 +139,25 @@ multiplayer.connect=Connect
 multiplayer.info1=Minecraft Multiplayer is currently not finished, but there
 multiplayer.info2=is some buggy early testing going on.
 multiplayer.ipinfo=Enter the IP of a server to connect to it:
-
-multiplayer.texturePrompt.line1=This server recommends the use of a custom texture pack.
+multiplayer.texturePrompt.line1=This server recommends the use of a custom resource pack.
 multiplayer.texturePrompt.line2=Would you like to download and install it automagically?
-
 multiplayer.downloadingTerrain=Downloading terrain
-
 multiplayer.stopSleeping=Leave Bed
+multiplayer.player.joined=%s joined the game
+multiplayer.player.left=%s left the game
 
+chat.cannotSend=Cannot send chat message
+chat.type.text=<%s> %s
+chat.type.emote=* %s %s
+chat.type.announcement=[%s] %s
+chat.type.admin=[%s: %s]
 chat.link.confirm=Are you sure you want to open the following website?
 chat.link.warning=Never open links from people that you don't trust!
 chat.copy=Copy to Clipboard
 
 menu.playdemo=Play Demo World
 menu.resetdemo=Reset Demo World
+
 demo.day.1=This demo will last five game days, do your best!
 demo.day.2=Day Two
 demo.day.3=Day Three
@@ -258,7 +271,7 @@ options.snooper=Allow Snooper
 options.snooper.view=Snooper Settings...
 options.snooper.title=Machine Specs Collection
 options.snooper.desc=We want to collect information about your machine to help improve Minecraft by knowing what we can support and where the biggest problems are. All of this information is completely anonymous and viewable below. We promise we won't do anything bad with this data, but if you want to opt out then feel free to toggle it off!
-options.texture.pack=Texture Packs
+options.resourcepack=Resource Packs
 options.fullscreen=Fullscreen
 options.vsync=Use VSync
 options.touchscreen=Touchscreen Mode
@@ -286,10 +299,9 @@ key.pickItem=Pick Block
 key.mouseButton=Button %1$s
 key.command=Command
 
-texturePack.openFolder=Open texture pack folder
-texturePack.title=Select Texture Pack
-texturePack.folderInfo=(Place texture pack files here)
-texturePack.incompatible=Incompatible
+resourcePack.openFolder=Open resource pack folder
+resourcePack.title=Select Resource Pack
+resourcePack.folderInfo=(Place resource pack files here)
 
 book.pageIndicator=Page %1$s of %2$s
 book.byAuthor=by %1$s
@@ -299,7 +311,7 @@ book.finalizeButton=Sign and Close
 book.finalizeWarning=Note! When you sign the book, it will no longer be editable.
 
 tile.stone.name=Stone
-
+tile.hayBlock.name=Hay Bale
 tile.grass.name=Grass Block
 tile.dirt.name=Dirt
 tile.stonebrick.name=Cobblestone
@@ -376,6 +388,7 @@ tile.chest.name=Chest
 tile.chestTrap.name=Trapped Chest
 tile.redstoneDust.name=Redstone Dust
 tile.oreDiamond.name=Diamond Ore
+tile.blockCoal.name=Block of Coal
 tile.blockDiamond.name=Block of Diamond
 tile.workbench.name=Crafting Table
 tile.crops.name=Crops
@@ -399,15 +412,48 @@ tile.oreRedstone.name=Redstone Ore
 tile.notGate.name=Redstone Torch
 tile.button.name=Button
 tile.snow.name=Snow
+tile.woolCarpet.black.name=Black Carpet
+tile.woolCarpet.red.name=Red Carpet
+tile.woolCarpet.green.name=Green Carpet
+tile.woolCarpet.brown.name=Brown Carpet
+tile.woolCarpet.blue.name=Blue Carpet
+tile.woolCarpet.purple.name=Purple Carpet
+tile.woolCarpet.cyan.name=Cyan Carpet
+tile.woolCarpet.silver.name=Light Gray Carpet
+tile.woolCarpet.gray.name=Gray Carpet
+tile.woolCarpet.pink.name=Pink Carpet
+tile.woolCarpet.lime.name=Lime Carpet
+tile.woolCarpet.yellow.name=Yellow Carpet
+tile.woolCarpet.lightBlue.name=Light Blue Carpet
+tile.woolCarpet.magenta.name=Magenta Carpet
+tile.woolCarpet.orange.name=Orange Carpet
+tile.woolCarpet.white.name=Carpet
 tile.ice.name=Ice
 tile.cactus.name=Cactus
 tile.clay.name=Clay
+tile.clayHardenedStained.black.name=Black Stained Clay
+tile.clayHardenedStained.red.name=Red Stained Clay
+tile.clayHardenedStained.green.name=Green Stained Clay
+tile.clayHardenedStained.brown.name=Brown Stained Clay
+tile.clayHardenedStained.blue.name=Blue Stained Clay
+tile.clayHardenedStained.purple.name=Purple Stained Clay
+tile.clayHardenedStained.cyan.name=Cyan Stained Clay
+tile.clayHardenedStained.silver.name=Light Gray Stained Clay
+tile.clayHardenedStained.gray.name=Gray Stained Clay
+tile.clayHardenedStained.pink.name=Pink Stained Clay
+tile.clayHardenedStained.lime.name=Lime Stained Clay
+tile.clayHardenedStained.yellow.name=Yellow Stained Clay
+tile.clayHardenedStained.lightBlue.name=Light Blue Stained Clay
+tile.clayHardenedStained.magenta.name=Magenta Stained Clay
+tile.clayHardenedStained.orange.name=Orange Stained Clay
+tile.clayHardenedStained.white.name=White Stained Clay
+tile.clayHardened.name=Hardened Clay
 tile.reeds.name=Sugar cane
 tile.jukebox.name=Jukebox
 tile.fence.name=Fence
 tile.fenceGate.name=Fence Gate
 tile.pumpkin.name=Pumpkin
-tile.litpumpkin.name=Jack 'o' Lantern
+tile.litpumpkin.name=Jack o'Lantern
 tile.hellrock.name=Netherrack
 tile.hellsand.name=Soul Sand
 tile.lightgem.name=Glowstone
@@ -497,6 +543,8 @@ tile.quartzBlock.chiseled.name=Chiseled Quartz Block
 tile.quartzBlock.lines.name=Pillar Quartz Block
 tile.stairsQuartz.name=Quartz Stairs
 
+item.nameTag.name=Name Tag
+item.leash.name=Lead
 item.shovelIron.name=Iron Shovel
 item.pickaxeIron.name=Iron Pickaxe
 item.hatchetIron.name=Iron Axe
@@ -702,6 +750,9 @@ item.fireworksCharge.type.4=Burst
 item.fireworksCharge.type=Unknown Shape
 item.netherbrick.name=Nether Brick
 item.netherquartz.name=Nether Quartz
+item.horsearmormetal.name=Iron Horse Armor
+item.horsearmorgold.name=Gold Horse Armor
+item.horsearmordiamond.name=Diamond Horse Armor
 
 container.inventory=Inventory
 container.hopper=Item Hopper
@@ -764,6 +815,12 @@ entity.Wolf.name=Wolf
 entity.Ozelot.name=Ocelot
 entity.Cat.name=Cat
 entity.Bat.name=Bat
+entity.EntityHorse.name=Horse
+entity.horse.name=Horse
+entity.donkey.name=Donkey
+entity.mule.name=Mule
+entity.skeletonhorse.name=Skeleton Horse
+entity.zombiehorse.name=Zombie Horse
 
 entity.PrimedTnt.name=Block of TNT
 entity.FallingSand.name=Falling Block
@@ -781,8 +838,8 @@ death.fell.accident.generic=%1$s fell from a high place
 death.fell.killer=%1$s was doomed to fall
 death.fell.assist=%1$s was doomed to fall by %2$s
 death.fell.assist.item=%1$s was doomed to fall by %2$s using %3$s
-death.fell.finish=%1$s was fell too far and was finished by %2$s
-death.fell.finish.item=%1$s was fell too far and was finished by %2$s using %3$s
+death.fell.finish=%1$s fell too far and was finished by %2$s
+death.fell.finish.item=%1$s fell too far and was finished by %2$s using %3$s
 
 death.attack.inFire=%1$s went up in flames
 death.attack.inFire.player=%1$s walked into fire whilst fighting %2$s
@@ -827,6 +884,7 @@ deathScreen.hardcoreInfo=You cannot respawn in hardcore mode!
 deathScreen.title=You died!
 deathScreen.leaveServer=Leave server
 
+potion.effects.whenDrank=When Applied:
 potion.empty=No Effects
 potion.moveSpeed=Speed
 potion.moveSlowdown=Slowness
@@ -848,6 +906,9 @@ potion.nightVision=Night Vision
 potion.hunger=Hunger
 potion.poison=Poison
 potion.wither=Wither
+potion.healthBoost=Health Boost
+potion.absorption=Absorption
+potion.saturation=Saturation
 
 potion.moveSpeed.postfix=Potion of Swiftness
 potion.moveSlowdown.postfix=Potion of Slowness
@@ -869,6 +930,9 @@ potion.nightVision.postfix=Potion of Night Vision
 potion.hunger.postfix=Potion of Hunger
 potion.poison.postfix=Potion of Poison
 potion.wither.postfix=Potion of Decay
+potion.healthBoost.postfix=Potion of Health Boost
+potion.absorption.postfix=Potion of Absorption
+potion.saturation.postfix=Potion of Saturation
 
 potion.potency.0=
 potion.potency.1=II
@@ -956,7 +1020,7 @@ stat.depleted=Times Depleted
 stat.crafted=Times Crafted
 
 stat.startGame=Times played
-stat.createWorld=Worlds played
+stat.createWorld=Worlds created
 stat.loadWorld=Saves loaded
 stat.joinMultiplayer=Multiplayer joins
 stat.leaveGame=Games quit
@@ -1048,10 +1112,12 @@ achievement.bookcase=Librarian
 achievement.bookcase.desc=Build some bookshelves to improve your enchantment table
 
 commands.generic.exception=An unknown error occurred while attempting to perform this command
+commands.generic.permission=You do not have permission to use this command
 commands.generic.syntax=Invalid command syntax
 commands.generic.player.notFound=That player cannot be found
-commands.generic.notFound=Unknown command. Try /help for a list of commands.
+commands.generic.notFound=Unknown command. Try /help for a list of commands
 commands.generic.num.invalid='%s' is not a valid number
+commands.generic.boolean.invalid='%s' is not true or false
 commands.generic.num.tooSmall=The number you have entered (%d) is too small, it must be at least %d
 commands.generic.num.tooBig=The number you have entered (%d) is too big, it must be at most %d
 commands.generic.double.tooSmall=The number you have entered (%.2f) is too small, it must be at least %.2f
@@ -1063,6 +1129,9 @@ commands.xp.success=Given %d experience to %s
 commands.xp.success.levels=Given %d levels to %s
 commands.xp.success.negative.levels=Taken %d levels from %s
 commands.xp.usage=/xp <amount> [player] OR /xp <amount>L [player]
+commands.playsound.usage=/playsound <sound> <player> [x] [y] [z] [volume] [pitch] [minimumVolume]
+commands.playsound.success=Played sound '%s' to %s
+commands.playsound.playerTooFar=Player %s is too far away to hear the sound
 commands.give.usage=/give <player> <item> [amount] [data]
 commands.give.notFound=There is no such item with ID %d
 commands.give.success=Given %s (ID %d) * %d to %s
@@ -1070,24 +1139,30 @@ commands.effect.usage=/effect <player> <effect> [seconds] [amplifier]
 commands.effect.notFound=There is no such mob effect with ID %d
 commands.effect.success=Given %1$s (ID %2$d) * %3$d to %4$s for %5$d seconds
 commands.effect.success.removed=Took %1$s from %2$s
+commands.effect.success.removed.all=Took all effects from %s
 commands.effect.failure.notActive=Couldn't take %1$s from %2$s as they do not have the effect
+commands.effect.failure.notActive.all=Couldn't take any effects from %s as they do not have any
 commands.enchant.usage=/enchant <player> <enchantment ID> [level]
 commands.enchant.notFound=There is no such enchantment with ID %d
-commands.enchant.noItem=The target doesn't hold an item 
+commands.enchant.noItem=The target doesn't hold an item
 commands.enchant.cantEnchant=The selected enchantment can't be added to the target item
 commands.enchant.cantCombine=%1$s can't be combined with %2$s
 commands.enchant.success=Enchanting succeeded
 commands.clear.usage=/clear <player> [item] [data]
 commands.clear.success=Cleared the inventory of %s, removing %d items
 commands.clear.failure=Could not clear the inventory of %s, no items to remove
+commands.downfall.usage=/toggledownfall
 commands.downfall.success=Toggled downfall
 commands.time.usage=/time <set|add> <value>
 commands.time.added=Added %d to the time
 commands.time.set=Set the time to %d
+commands.players.usage=/list
 commands.players.list=There are %d/%d players online:
 commands.banlist.ips=There are %d total banned IP addresses:
 commands.banlist.players=There are %d total banned players:
 commands.banlist.usage=/banlist [ips|players]
+commands.kill.usage=/kill
+commands.kill.success=Ouch! That looked like it hurt
 commands.kick.success=Kicked %s from the game
 commands.kick.success.reason=Kicked %s from the game: '%s'
 commands.kick.usage=/kick <player> [reason ...]
@@ -1107,11 +1182,17 @@ commands.banip.usage=/ban-ip <address|name> [reason ...]
 commands.unbanip.invalid=You have entered an invalid IP address
 commands.unbanip.success=Unbanned IP address %s
 commands.unbanip.usage=/pardon-ip <address>
+commands.save.usage=/save-all
+commands.save-on.alreadyOn=Saving is already turned on.
+commands.save-on.usage=/save-on
+commands.save-off.alreadyOff=Saving is already turned off.
+commands.save-off.usage=/save-off
 commands.save.enabled=Turned on world auto-saving
 commands.save.disabled=Turned off world auto-saving
 commands.save.start=Saving...
 commands.save.success=Saved the world
 commands.save.failed=Saving failed: %s
+commands.stop.usage=/stop
 commands.stop.start=Stopping the server
 commands.tp.success=Teleported %s to %s
 commands.tp.success.coordinates=Teleported %s to %.2f,%.2f,%.2f
@@ -1195,7 +1276,8 @@ commands.me.usage=/me <action ...>
 commands.help.header=--- Showing help page %d of %d (/help <page>) ---
 commands.help.footer=Tip: Use the <tab> key while typing a command to auto-complete the command or its arguments
 commands.help.usage=/help [page|command name]
-commands.publish.started=Local game hosted on %s
+commands.publish.usage=/publish
+commands.publish.started=Local game hosted on port %s
 commands.publish.failed=Unable to host local game
 commands.debug.start=Started debug profiling
 commands.debug.stop=Stopped debug profiling after %.2f seconds (%d ticks)
@@ -1218,6 +1300,17 @@ commands.weather.rain=Changing to rainy weather
 commands.weather.thunder=Changing to rain and thunder
 commands.testfor.usage=/testfor <player>
 commands.testfor.failed=/testfor is only usable by commandblocks with analog output
+commands.seed.usage=/seed
+commands.seed.success=Seed: %s
+commands.spreadplayers.usage=/spreadplayers <x> <z> <spreadDistance> <maxRange> <respectTeams true|false> <player ...>
+commands.spreadplayers.spreading.teams=Spreading %s teams %s blocks around %s,%s (min %s blocks apart)
+commands.spreadplayers.spreading.players=Spreading %s players %s blocks around %s,%s (min %s blocks apart)
+commands.spreadplayers.success.teams=Successfully spread %s teams around %s,%s
+commands.spreadplayers.success.players=Successfully spread %s players around %s,%s
+commands.spreadplayers.info.teams=(Average distance between teams is %s blocks apart after %s iterations)
+commands.spreadplayers.info.players=(Average distance between players is %s blocks apart after %s iterations)
+commands.spreadplayers.failure.teams=Could not spread %s teams around %s,%s (too many players for space - try using spread of at most %s)
+commands.spreadplayers.failure.players=Could not spread %s players around %s,%s (too many players for space - try using spread of at most %s)
 
 itemGroup.buildingBlocks=Building Blocks
 itemGroup.decorations=Decoration Blocks
@@ -1235,6 +1328,7 @@ itemGroup.inventory=Survival Inventory
 inventory.binSlot=Destroy Item
 
 advMode.setCommand=Set Console Command for Block
+advMode.setCommand.success=Command set: %s
 advMode.command=Console Command
 advMode.nearestPlayer=Use "@p" to target nearest player
 advMode.randomPlayer=Use "@r" to target random player
@@ -1244,29 +1338,42 @@ advMode.notEnabled=Command blocks are not enabled on this server
 advMode.notAllowed=Must be an opped player in creative mode
 
 mco.title=Minecraft Realms
-mco.selectServer.select=Join World
+mount.onboard=Press %1$s to dismount
+
+mco.selectServer.play=Play
 mco.selectServer.configure=Configure
-mco.selectServer.create=Create World
+mco.selectServer.leave=Leave Realm
+mco.selectServer.create=Create Realm
 mco.selectServer.moreinfo=More Info
 
-mco.configure.world.edit.title=Edit World
+mco.selectServer.expired=Expired Server
+mco.selectServer.open=Open Server
+mco.selectServer.closed=Closed Server
 
-mco.configure.world.title=Configure World
+mco.selectServer.expires.days=Expires in %s days
+mco.selectServer.expires.day=Expires in a day
+mco.selectServer.expires.soon=Expires soon
+
+mco.configure.world.edit.title=Edit Realm
+
+mco.configure.world.title=Configure Realm
 mco.configure.world.name=Name
 mco.configure.world.description=Description
 mco.configure.world.location=Location
 mco.configure.world.invited=Invited
 mco.configure.world.buttons.edit=Edit
-mco.configure.world.buttons.reset=Reset World
+mco.configure.world.buttons.reset=Reset Realm
 mco.configure.world.buttons.done=Done
 mco.configure.world.buttons.delete=Delete
-mco.configure.world.buttons.open=Open World
-mco.configure.world.buttons.close=Close World
+mco.configure.world.buttons.open=Open Realm
+mco.configure.world.buttons.close=Close Realm
 mco.configure.world.buttons.invite=Invite
 mco.configure.world.buttons.uninvite=Uninvite
+mco.configure.world.buttons.backup=Backups
 mco.configure.world.buttons.subscription=Subscription
 mco.configure.world.invite.profile.name=Name
 mco.configure.world.uninvite.question=Are you sure that you want to uninvite
+mco.configure.world.status=Status
 
 mco.configure.world.subscription.title=Subscription Info
 mco.configure.world.subscription.daysleft=Days Left
@@ -1275,18 +1382,62 @@ mco.configure.world.subscription.extend=Extend
 
 mco.create.world.location.title=Locations
 mco.create.world.location.warning=You may not get the exact location you select
-mco.create.world.wait=Creating the world...
+mco.create.world.wait=Creating the realm...
+mco.create.world.seed=Seed (Optional)
 
-mco.reset.world.title=Reset World
-mco.reset.world.warning=This will permanently delete your world!
+mco.reset.world.title=Reset Realm
+mco.reset.world.warning=This will permanently delete your realm!
 mco.reset.world.seed=Seed (Optional)
-mco.reset.world.resetting.screen.title=Resetting World...
+mco.reset.world.resetting.screen.title=Resetting Realm...
 
-mco.configure.world.close.question.line1=Your world will become unavailable.
+mco.configure.world.close.question.line1=Your realm will become unavailable.
 mco.configure.world.close.question.line2=Are you sure you want to do that?
+
+mco.configure.world.leave.question.line1=If you leave this realm you won't see it unless invited again
+mco.configure.world.leave.question.line2=Are you sure you want to do that?
+
+mco.configure.world.reset.question.line1=Your realm will be regenerated and your current realm will be lost
+mco.configure.world.reset.question.line2=Are you sure you want to do that?
+
+mco.configure.world.restore.question.line1=Your realm will be restored to a previous version
+mco.configure.world.restore.question.line2=Are you sure you want to do that?
 
 mco.connect.connecting=Connecting to the online server...
 mco.connect.authorizing=Logging in...
 mco.connect.failed=Failed to connect to the online server
 
 mco.create.world=Create
+
+mco.client.outdated.title=Client Outdated!
+mco.client.outdated.msg=Your client is outdated, please consider updating it to use Realms
+
+mco.backup.title=Backups
+mco.backup.button.restore=Restore
+mco.backup.restoring=Restoring your realm
+
+mco.template.title=Realm Templates
+mco.template.button.select=Select
+mco.template.default.name=Select Template (Optional)
+mco.template.name=Template
+
+mco.invites.button.accept=Accept
+mco.invites.button.reject=Reject
+mco.invites.title=Pending Invitations
+mco.invites.pending=New invitations!
+
+build.tooHigh=Height limit for building is %s blocks
+
+attribute.modifier.plus.0=+%d %s
+attribute.modifier.plus.1=+%d%% %s
+attribute.modifier.plus.2=+%d%% %s
+attribute.modifier.take.0=-%d %s
+attribute.modifier.take.1=-%d%% %s
+attribute.modifier.take.2=-%d%% %s
+
+attribute.name.horse.jumpStrength=Horse Jump Strength
+attribute.name.zombie.spawnReinforcements=Zombie Reinforcements
+attribute.name.generic.maxHealth=Max Health
+attribute.name.generic.followRange=Mob Follow Range
+attribute.name.generic.knockbackResistance=Knockback Resistance
+attribute.name.generic.movementSpeed=Speed
+attribute.name.generic.attackDamage=Attack Damage
