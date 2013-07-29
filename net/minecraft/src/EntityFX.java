@@ -36,10 +36,7 @@ public class EntityFX extends Entity
     protected EntityFX(World par1World, double par2, double par4, double par6)
     {
         super(par1World);
-        this.particleAge = 0;
-        this.particleMaxAge = 0;
         this.particleAlpha = 1.0F;
-        this.particleIcon = null;
         this.setSize(0.2F, 0.2F);
         this.yOffset = this.height / 2.0F;
         this.setPosition(par2, par4, par6);
@@ -192,11 +189,11 @@ public class EntityFX extends Entity
      */
     public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
 
-    public void setParticleIcon(RenderEngine par1RenderEngine, Icon par2Icon)
+    public void func_110125_a(Icon par1Icon)
     {
         if (this.getFXLayer() == 1)
         {
-            this.particleIcon = par2Icon;
+            this.particleIcon = par1Icon;
         }
         else
         {
@@ -205,7 +202,7 @@ public class EntityFX extends Entity
                 throw new RuntimeException("Invalid call to Particle.setTex, use coordinate methods");
             }
 
-            this.particleIcon = par2Icon;
+            this.particleIcon = par1Icon;
         }
     }
 

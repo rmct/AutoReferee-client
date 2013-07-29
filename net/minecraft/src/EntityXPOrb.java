@@ -8,7 +8,7 @@ public class EntityXPOrb extends Entity
     public int xpColor;
 
     /** The age of the XP orb in ticks. */
-    public int xpOrbAge = 0;
+    public int xpOrbAge;
     public int field_70532_c;
 
     /** The health of this XP orb. */
@@ -182,13 +182,13 @@ public class EntityXPOrb extends Entity
      */
     protected void dealFireDamage(int par1)
     {
-        this.attackEntityFrom(DamageSource.inFire, par1);
+        this.attackEntityFrom(DamageSource.inFire, (float)par1);
     }
 
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
     {
         if (this.isEntityInvulnerable())
         {
@@ -197,7 +197,7 @@ public class EntityXPOrb extends Entity
         else
         {
             this.setBeenAttacked();
-            this.xpOrbHealth -= par2;
+            this.xpOrbHealth = (int)((float)this.xpOrbHealth - par2);
 
             if (this.xpOrbHealth <= 0)
             {
