@@ -1,5 +1,6 @@
 package net.minecraft.src;
 
+import java.util.ArrayList;
 import java.util.Random;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -436,6 +437,8 @@ public abstract class RendererLivingEntity extends Render
             {
                 String var13 = par1EntityLivingBase.getTranslatedEntityName();
 
+                //START CODE
+                /*
                 if (par1EntityLivingBase.isSneaking())
                 {
                     FontRenderer var14 = this.getFontRendererFromRenderManager();
@@ -470,15 +473,23 @@ public abstract class RendererLivingEntity extends Render
                 }
                 else
                 {
+                */
+                //END CODE
                     this.func_96449_a(par1EntityLivingBase, par2, par4, par6, var13, var9, var10);
-                }
+                //START CODE
+            	//}
+            	//END CODE
             }
         }
     }
 
     protected boolean func_110813_b(EntityLivingBase par1EntityLivingBase)
     {
-        return Minecraft.isGuiEnabled() && par1EntityLivingBase != this.renderManager.livingPlayer && !par1EntityLivingBase.func_98034_c(Minecraft.getMinecraft().thePlayer) && par1EntityLivingBase.riddenByEntity == null;
+        //START CODE
+    	//DON'T HIDE NAMETAGS WITH F1
+    	//return Minecraft.isGuiEnabled() && par1EntityLivingBase != this.renderManager.livingPlayer && !par1EntityLivingBase.func_98034_c(Minecraft.getMinecraft().thePlayer) && par1EntityLivingBase.riddenByEntity == null;
+    	return par1EntityLivingBase != this.renderManager.livingPlayer && !par1EntityLivingBase.func_98034_c(Minecraft.getMinecraft().thePlayer) && par1EntityLivingBase.riddenByEntity == null;
+    	//END CODE
     }
 
     protected void func_96449_a(EntityLivingBase par1EntityLivingBase, double par2, double par4, double par6, String par8Str, float par9, double par10)
@@ -523,21 +534,68 @@ public abstract class RendererLivingEntity extends Render
             {
                 var16 = -10;
             }
+            
+            //START CODE
+         	AutoReferee autoReferee = AutoReferee.get();
+         	AutoRefereePlayer apl = autoReferee.getPlayer(par2Str);
+         	if (apl != null) {
+         		int health = apl.getHealth();
+         		int armor = apl.getArmor();
+         		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+         		autoReferee.renderHearts(health, AutoReferee.PLAYER_NAMETAG_HEARTS_X_OFFSET, AutoReferee.PLAYER_NAMETAG_HEARTS_Y_OFFSET, 1F, false);
+         		autoReferee.renderArmor(armor, AutoReferee.PLAYER_NAMETAG_ARMOR_X_OFFSET, AutoReferee.PLAYER_NAMETAG_ARMOR_Y_OFFSET, 1F);
+         		ArrayList<AutoRefereeObjective> objs = apl.getObjectives();
+         		if (objs != null) {
+         			int xoffset = objs.size() * AutoReferee.PLAYER_NAMETAG_WOOL_X_OFFSET + 30;
+         			xoffset /= 2;
+         			AutoRefereeObjective obj;
+         			for (int i = 0; i < objs.size(); i++) {
+         				obj = objs.get(i);
+         				autoReferee.renderItem(obj.getId(), obj.getData(), i * AutoReferee.PLAYER_NAMETAG_WOOL_X_OFFSET - xoffset, AutoReferee.PLAYER_NAMETAG_WOOL_Y_OFFSET, 1F);
+         			}
+         		}
+         	}
+         	
+         	if(par2Str.startsWith("\u00A7") && autoReferee.registeredChannel)
+         		par2Str = par2Str.substring(2);
+         	//END CODE 
 
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             var15.startDrawingQuads();
-            int var17 = var12.getStringWidth(par2Str) / 2;
-            var15.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+         	int var17 = var12.getStringWidth(par2Str) / 2;
+            
+            //START CODE
+         	// var15.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+         	AutoRefereeTeam at = null;
+         	if (autoReferee.getPlayer(par2Str) != null)
+         		at = autoReferee.getPlayer(par2Str).getTeam();
+         	if (at != null)
+         		var15.setColorRGBA_F(at.getBoxColorRed(), at.getBoxColorGreen(), at.getBoxColorBlue(), at.getBoxColorAlpha());
+         	else
+         		var15.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+         	//END CODE
+         	
             var15.addVertex((double)(-var17 - 1), (double)(-1 + var16), 0.0D);
             var15.addVertex((double)(-var17 - 1), (double)(8 + var16), 0.0D);
             var15.addVertex((double)(var17 + 1), (double)(8 + var16), 0.0D);
             var15.addVertex((double)(var17 + 1), (double)(-1 + var16), 0.0D);
             var15.draw();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
-            var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, 553648127);
+            
+            //START CODE
+         	// var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, 553648127);
+         	var12.drawString(par2Str, -var17, var16, 553648127);
+         	//END CODE
+         	
+         	//START CODE get it from two lines further and use a different width: var17 instead of getStringWidth()
+         	var12.drawString(par2Str, -var17, var16, -1);
+         	//END CODE
+         	
             GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glDepthMask(true);
-            var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, -1);
+            //START CODE get it from here
+            //var12.drawString(par2Str, -var12.getStringWidth(par2Str) / 2, var16, -1);
+            //END CODE
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
