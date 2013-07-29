@@ -3,6 +3,7 @@ package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class AutoRefereePlayer {
 	private String username;
@@ -15,10 +16,11 @@ public class AutoRefereePlayer {
 	private int killstreak;
 	private int accuracy;
 	private AutoRefereeTeam team;
-	private String capeUrl;
 	private boolean loggedIn;
 	private HashMap<String, Integer> itemAmounts = new HashMap<String, Integer>();
 	private String dimension;
+	private ResourceLocation skin;
+	private ResourceLocation cape;
 
 	public AutoRefereePlayer(String username, AutoRefereeTeam team) {
 		this(username);
@@ -38,6 +40,10 @@ public class AutoRefereePlayer {
 		this.domination = new ArrayList<String>();
 		this.loggedIn = true;
 		this.dimension = "overworld";
+		//find skin resource (and bind if not yet loaded)
+		this.skin = AbstractClientPlayer.func_110311_f(username);
+		AbstractClientPlayer.func_110304_a(this.skin, this.username);
+		this.cape = null;
 	}
 
 	public int getHealth() {
@@ -141,15 +147,7 @@ public class AutoRefereePlayer {
 	public int getDominationAmount() {
 		return this.domination.size();
 	}
-
-	public String getCapeUrl() {
-		return this.capeUrl;
-	}
-
-	public void setCapeUrl(String capeUrl) {
-		this.capeUrl = capeUrl;
-	}
-
+	
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
@@ -174,6 +172,26 @@ public class AutoRefereePlayer {
 	
 	public String getDimension(){
 		return this.dimension;
+	}
+	
+	public ResourceLocation getSkin(){
+		return this.skin;
+	}
+	
+	public ResourceLocation getCape(){
+		return this.cape;
+	}
+	
+	public void setCapeUrl(String url){
+		if(url == ""){
+			cape = null;
+			return;
+		}
+		TextureManager tm = Minecraft.getMinecraft().func_110434_K();
+        ThreadDownloadImageData image = new ThreadDownloadImageData(url, (ResourceLocation)null, (IImageBuffer)null);
+        this.cape = AbstractClientPlayer.func_110299_g(this.username);
+        tm.func_110579_a(cape, (TextureObject)image);
+        Logger.getLogger("minecraft").info(url + " - " + (image == null));
 	}
 }
 // END CODE

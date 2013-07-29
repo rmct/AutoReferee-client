@@ -1,8 +1,6 @@
 //START CODE
 package net.minecraft.src;
 
-import net.minecraft.client.Minecraft;
-
 public class AutoRefereeHUD {
 	
 	public static int AUTOREFEREE_HUD_ALIGN = 4;

@@ -19,8 +19,6 @@ import java.util.logging.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import net.minecraft.client.Minecraft;
-
 public class AutoReferee {
 	public static final String CHANNEL = "autoref:referee";
 	public static final String DELIMITER = "\\|";
@@ -41,6 +39,9 @@ public class AutoReferee {
 	public static final int PLAYER_NAMETAG_ARMOR_Y_OFFSET = -22;
 	public static final int PLAYER_NAMETAG_WOOL_X_OFFSET = -20;
 	public static final int PLAYER_NAMETAG_WOOL_Y_OFFSET = -42;
+	
+	public static final ResourceLocation GUI_ICONS = new ResourceLocation("textures/gui/icons.png");
+	public static final ResourceLocation AUTOREFEREE_ICONS = new ResourceLocation("textures/AutoReferee.png");
 
 	// public static final int LIST_DISPLAY_TICKS = 50;
 	public static final int MESSAGE_DISPLAY_TICKS = 60;
@@ -670,19 +671,10 @@ public class AutoReferee {
 			return "";
 	}
 
-	public String getCapeUrlOfPlayer(String playerName, String defaultUrl) {
-		AutoRefereePlayer apl = getPlayer(playerName);
-		if (apl != null) {
-			return apl.getCapeUrl();
-		}
-		return defaultUrl;
-	}
-
 	public void setCapeUrlForPlayer(String playerName, String url) {
 		if (url == null)
 			return;
 		url = "http://" + url;
-		this.mc.renderEngine.obtainImageData(url, new ImageBufferDownload());
 		AutoRefereePlayer apl = getPlayer(playerName);
 		if (apl != null) {
 			apl.setCapeUrl(url);
@@ -926,7 +918,8 @@ public class AutoReferee {
 	private void drawTexturedModalRect(float x, float y, int u, int v, int width, int height, float scale) {
 		GuiIngame guiIngame = this.mc.ingameGUI;
 		renderSettingsStart(x, y, -guiIngame.zLevel, scale);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/gui/icons.png"));
+		// Bind the gui/icons file
+		this.mc.func_110434_K().func_110577_a(GUI_ICONS);
 		guiIngame.drawTexturedModalRect(0, 0, u, v, width, height);
 		renderSettingsEnd();
 	}
@@ -934,7 +927,6 @@ public class AutoReferee {
 	/* Render a right-aligned string */
 	public int renderString(String text, float x, float y, float scale, int color, boolean shadow) {
 		renderSettingsStart(x, y, 0, scale);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/font/default.png"));
 		int returnValue = 0;
 		if (shadow)
 			returnValue = this.mc.fontRenderer.drawStringWithShadow(text, 0, 0, color);
@@ -969,16 +961,14 @@ public class AutoReferee {
 	public void renderItem(int itemId, int itemDataValue, int itemAmount, int x, int y, float scale) {
 		renderSettingsStart(x, y, 0, scale);
 		ItemStack is = new ItemStack(itemId, itemAmount, itemDataValue);
-		renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, is, 0, 0);
-		renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, is, 0, 0);
+		renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.func_110434_K(), is, 0, 0);
+		renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.func_110434_K(), is, 0, 0);
 		renderSettingsEnd();
 		GL11.glDisable(GL11.GL_LIGHTING);
 	}
 
-	public void renderSkinHead(String name, float x, float y, float scale) {
-		String url = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(name) + ".png";
-		int texture = this.mc.renderEngine.getTextureForDownloadableImage(url, "/mob/char.png");
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+	public void renderSkinHead(AutoRefereePlayer apl, float x, float y, float scale) {
+		this.mc.func_110434_K().func_110577_a(apl.getSkin());
 		renderSettingsStart(x, y, 0, scale);
 		int size = 20;
 		float width = (float) 8 / 64;
@@ -996,7 +986,8 @@ public class AutoReferee {
 	}
 
 	public float renderAutoRefereeIcon(int id, int amount, float x, float y, float scale, int color) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/AutoReferee.png"));
+		// Bind the AutoReferee icons file
+		this.mc.func_110434_K().func_110577_a(AUTOREFEREE_ICONS);
 		renderSettingsStart(x, y, 0, scale);
 		int u = id % AUTOREFEREE_ICON_NUMBER_IN_WIDTH;
 		int v = id / AUTOREFEREE_ICON_NUMBER_IN_WIDTH;
@@ -1014,7 +1005,6 @@ public class AutoReferee {
 		if (amount > 0)
 			this.renderString("" + amount, AUTOREFEREE_ICON_SIZE * 0.65F, AUTOREFEREE_ICON_SIZE * 0.75F, scale * 0.8F, color, true);
 		renderSettingsEnd();
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/font/default.png"));
 		return scale * AUTOREFEREE_ICON_TEXTURE_SIZE;
 	}
 

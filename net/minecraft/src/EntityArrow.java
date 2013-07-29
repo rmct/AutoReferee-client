@@ -7,20 +7,20 @@ public class EntityArrow extends Entity implements IProjectile
     private int xTile = -1;
     private int yTile = -1;
     private int zTile = -1;
-    private int inTile = 0;
-    private int inData = 0;
-    private boolean inGround = false;
+    private int inTile;
+    private int inData;
+    private boolean inGround;
 
     /** 1 if the player can pick up the arrow */
-    public int canBePickedUp = 0;
+    public int canBePickedUp;
 
     /** Seems to be some sort of timer for animating an arrow. */
-    public int arrowShake = 0;
+    public int arrowShake;
 
     /** The owner of this arrow. */
     public Entity shootingEntity;
     private int ticksInGround;
-    private int ticksInAir = 0;
+    private int ticksInAir;
     private double damage = 2.0D;
 
     /** The amount of knockback an arrow applies when it hits a mob. */
@@ -42,21 +42,21 @@ public class EntityArrow extends Entity implements IProjectile
         this.yOffset = 0.0F;
     }
 
-    public EntityArrow(World par1World, EntityLiving par2EntityLiving, EntityLiving par3EntityLiving, float par4, float par5)
+    public EntityArrow(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase, float par4, float par5)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;
-        this.shootingEntity = par2EntityLiving;
+        this.shootingEntity = par2EntityLivingBase;
 
-        if (par2EntityLiving instanceof EntityPlayer)
+        if (par2EntityLivingBase instanceof EntityPlayer)
         {
             this.canBePickedUp = 1;
         }
 
-        this.posY = par2EntityLiving.posY + (double)par2EntityLiving.getEyeHeight() - 0.10000000149011612D;
-        double var6 = par3EntityLiving.posX - par2EntityLiving.posX;
-        double var8 = par3EntityLiving.boundingBox.minY + (double)(par3EntityLiving.height / 3.0F) - this.posY;
-        double var10 = par3EntityLiving.posZ - par2EntityLiving.posZ;
+        this.posY = par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight() - 0.10000000149011612D;
+        double var6 = par3EntityLivingBase.posX - par2EntityLivingBase.posX;
+        double var8 = par3EntityLivingBase.boundingBox.minY + (double)(par3EntityLivingBase.height / 3.0F) - this.posY;
+        double var10 = par3EntityLivingBase.posZ - par2EntityLivingBase.posZ;
         double var12 = (double)MathHelper.sqrt_double(var6 * var6 + var10 * var10);
 
         if (var12 >= 1.0E-7D)
@@ -65,26 +65,26 @@ public class EntityArrow extends Entity implements IProjectile
             float var15 = (float)(-(Math.atan2(var8, var12) * 180.0D / Math.PI));
             double var16 = var6 / var12;
             double var18 = var10 / var12;
-            this.setLocationAndAngles(par2EntityLiving.posX + var16, this.posY, par2EntityLiving.posZ + var18, var14, var15);
+            this.setLocationAndAngles(par2EntityLivingBase.posX + var16, this.posY, par2EntityLivingBase.posZ + var18, var14, var15);
             this.yOffset = 0.0F;
             float var20 = (float)var12 * 0.2F;
             this.setThrowableHeading(var6, var8 + (double)var20, var10, par4, par5);
         }
     }
 
-    public EntityArrow(World par1World, EntityLiving par2EntityLiving, float par3)
+    public EntityArrow(World par1World, EntityLivingBase par2EntityLivingBase, float par3)
     {
         super(par1World);
         this.renderDistanceWeight = 10.0D;
-        this.shootingEntity = par2EntityLiving;
+        this.shootingEntity = par2EntityLivingBase;
 
-        if (par2EntityLiving instanceof EntityPlayer)
+        if (par2EntityLivingBase instanceof EntityPlayer)
         {
             this.canBePickedUp = 1;
         }
 
         this.setSize(0.5F, 0.5F);
-        this.setLocationAndAngles(par2EntityLiving.posX, par2EntityLiving.posY + (double)par2EntityLiving.getEyeHeight(), par2EntityLiving.posZ, par2EntityLiving.rotationYaw, par2EntityLiving.rotationPitch);
+        this.setLocationAndAngles(par2EntityLivingBase.posX, par2EntityLivingBase.posY + (double)par2EntityLivingBase.getEyeHeight(), par2EntityLivingBase.posZ, par2EntityLivingBase.rotationYaw, par2EntityLivingBase.rotationPitch);
         this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
         this.posY -= 0.10000000149011612D;
         this.posZ -= (double)(MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
@@ -301,11 +301,11 @@ public class EntityArrow extends Entity implements IProjectile
                         var4.entityHit.setFire(5);
                     }
 
-                    if (var4.entityHit.attackEntityFrom(var22, var24))
+                    if (var4.entityHit.attackEntityFrom(var22, (float)var24))
                     {
-                        if (var4.entityHit instanceof EntityLiving)
+                        if (var4.entityHit instanceof EntityLivingBase)
                         {
-                            EntityLiving var25 = (EntityLiving)var4.entityHit;
+                            EntityLivingBase var25 = (EntityLivingBase)var4.entityHit;
 
                             if (!this.worldObj.isRemote)
                             {

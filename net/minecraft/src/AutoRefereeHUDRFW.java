@@ -1,8 +1,6 @@
 //START CODE
 package net.minecraft.src;
 
-import net.minecraft.client.Minecraft;
-
 import org.lwjgl.opengl.GL11;
 
 public class AutoRefereeHUDRFW extends AutoRefereeHUD {
@@ -69,7 +67,7 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			armor = apl.getArmor();
 			autoReferee.renderHearts(health, PLAYER_LIST_HEALTH_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, true);
 			autoReferee.renderArmor(armor, PLAYER_LIST_ARMOR_X_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F);
-			autoReferee.renderSkinHead(apl.getName(), PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
+			autoReferee.renderSkinHead(apl, PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
 
 			j = 0;
 			for (AutoRefereeObjective obj : apl.getObjectives()) {
