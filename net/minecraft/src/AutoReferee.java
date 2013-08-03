@@ -287,7 +287,7 @@ public class AutoReferee {
 				this.setChampions(command[3]);
 			} else if ("swap".equals(command[2])) {
 				swapTeams = !swapTeams;
-			} else if ("nigthvis".equals(command[2])){
+			} else if ("nightvis".equals(command[2])){
 				if(command.length >= 4){
 					if(command[3]=="1")
 						nightVision = true;
