@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,17 +60,13 @@ public class AutoReferee {
 	public AutoRefereeMessage lastMessage = null;
 
 	// match fields
-	private int numberOfSeconds;
-	private int numberOfMinutes;
-	private int numberOfHours;
 	private int lastTick;
 	public int tickInit = 0;
 	public boolean startOfMatch = false; // is true for a short amount of time after the match|init message.
-	public boolean timeUpdated = false;
 	public boolean gameRunning;
 	public boolean countingDown;
-	public boolean countdownUpdated;
-	private int countdown;
+	private Calendar countdownEnd;
+	private Calendar matchStart;
 	private String mapName;
 	private AutoRefereeTeam winners;
 	private int lastTickPlayerList;
@@ -89,17 +86,10 @@ public class AutoReferee {
 
 	public void resetValues() {
 		this.mapName = "";
-		this.numberOfHours = 0;
-		this.numberOfMinutes = 0;
-		this.numberOfSeconds = 0;
-		this.lastTick = 0;
-		this.timeUpdated = false;
 		this.gameRunning = false;
 		this.players.clear();
 		this.teams.clear();
-		this.countdown = 0;
 		this.countingDown = false;
-		this.countdownUpdated = false;
 		this.winners = null;
 		this.lastTickPlayerList = 0;
 		this.lastTickTeamList = 0;
@@ -288,7 +278,7 @@ public class AutoReferee {
 			} else if ("time".equals(command[2])) {
 				this.setTime(command[3]);
 			} else if ("countdown".equals(command[2])) {
-				this.setCountdown(command[3]);
+				this.setCountdown(Integer.parseInt(command[3]));
 			} else if ("start".equals(command[2])) {
 				this.startMatch();
 			} else if ("end".equals(command[2])) {
@@ -372,25 +362,28 @@ public class AutoReferee {
 		return false;
 	}
 
-	public void setCountdown(String seconds) {
-		this.countdown = Integer.parseInt(seconds);
-		this.countingDown = true;
-		this.countdownUpdated = true;
+	public void setCountdown(int seconds) {
+		this.countingDown = (seconds != 0);
+		this.countdownEnd = Calendar.getInstance();
+		this.countdownEnd.add(Calendar.SECOND, seconds+1);
 	}
-
-	public void updateCountdown(int tick) {
-		if(countdown == 0)
-			countingDown = false;
-		if (tick - lastTick >= 20) {
-			--countdown;
-			this.lastTick += 20;
+	
+	public String getTime(){
+		if(!gameRunning && !countingDown)
+			return "00:00:00";
+		int seconds = 0;
+		if(gameRunning){
+			Calendar now = Calendar.getInstance();
+			seconds = (int)((now.getTimeInMillis() - matchStart.getTimeInMillis())/1000);
+		} else{
+			Calendar now = Calendar.getInstance();
+			seconds = (int)(( countdownEnd.getTimeInMillis() - now.getTimeInMillis())/1000);
+			if(seconds == 0)
+				countingDown = false;
 		}
-	}
-
-	public String getCountdown() {
-		numberOfSeconds = countdown % 60;
-		numberOfMinutes = (countdown / 60) % 60;
-		numberOfHours = countdown / 60 / 60;
+		int numberOfSeconds = seconds % 60;
+		int numberOfMinutes = (seconds / 60) % 60;
+		int numberOfHours = seconds / 60 / 60;
 		String s = "";
 		s += (numberOfHours >= 10) ? "" : "0";
 		s += numberOfHours;
@@ -402,19 +395,11 @@ public class AutoReferee {
 		s += numberOfSeconds;
 		return s;
 	}
-
-	public void updateLastCountDownTick(int tick) {
-		this.lastTick = tick;
-		this.countdownUpdated = false;
-	}
-
+	
 	public void startMatch() {
-		this.countdown = 0;
 		this.countingDown = false;
-		this.numberOfHours = 0;
-		this.numberOfMinutes = 0;
-		this.numberOfSeconds = 0;
 		this.gameRunning = true;
+		this.matchStart = Calendar.getInstance();
 	}
 
 	public void endMatch(String teamNameWinners) {
@@ -436,53 +421,16 @@ public class AutoReferee {
 		times = timestamp.split(",");
 		if(timestamp.contains(":"))
 			times = timestamp.split(":");
-		numberOfHours = Integer.parseInt(times[0]);
-		numberOfMinutes = Integer.parseInt(times[1]);
-		numberOfSeconds = Integer.parseInt(times[2]);
-		timeUpdated = true;
-		if (numberOfHours != 0 || numberOfMinutes != 0 || numberOfSeconds != 0)
+		int numberOfHours = Integer.parseInt(times[0]);
+		int numberOfMinutes = Integer.parseInt(times[1]);
+		int numberOfSeconds = Integer.parseInt(times[2]);
+		if (numberOfHours != 0 || numberOfMinutes != 0 || numberOfSeconds != 0){
 			gameRunning = true;
-	}
-
-	public String getTime() {
-		String s = "";
-		s += (numberOfHours >= 10) ? "" : "0";
-		s += numberOfHours;
-		s += ":";
-		s += (numberOfMinutes >= 10) ? "" : "0";
-		s += numberOfMinutes;
-		s += ":";
-		s += (numberOfSeconds >= 10) ? "" : "0";
-		s += numberOfSeconds;
-		return s;
-	}
-
-	public void updateTime(int tick) {
-		if (getDifferenceLastTick(tick) >= 20) {
-			addSecond();
-			this.lastTick += 20;
+			matchStart = Calendar.getInstance();
+			matchStart.add(Calendar.SECOND, -numberOfSeconds);
+			matchStart.add(Calendar.MINUTE, -numberOfMinutes);
+			matchStart.add(Calendar.HOUR, -numberOfHours);
 		}
-	}
-
-	public void addSecond() {
-		++this.numberOfSeconds;
-		if (this.numberOfSeconds >= 60) {
-			this.numberOfSeconds -= 60;
-			++this.numberOfMinutes;
-		}
-		if (this.numberOfMinutes >= 60) {
-			this.numberOfMinutes -= 60;
-			++this.numberOfHours;
-		}
-	}
-
-	public void updateLastTick(int tick) {
-		this.lastTick = tick;
-		this.timeUpdated = false;
-	}
-
-	public int getDifferenceLastTick(int tick) {
-		return tick - this.lastTick;
 	}
 
 	public AutoRefereePlayer addPlayer(String name) {

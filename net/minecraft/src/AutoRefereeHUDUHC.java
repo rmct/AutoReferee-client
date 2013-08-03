@@ -174,30 +174,17 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		AutoReferee autoReferee = AutoReferee.get();
 		ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
-		// update time
-		if (autoReferee.timeUpdated)
-			autoReferee.updateLastTick(mc.ingameGUI.updateCounter);
-		if (autoReferee.gameRunning)
-			autoReferee.updateTime(mc.ingameGUI.updateCounter);
-		// update countdown
-		if (autoReferee.countdownUpdated)
-			autoReferee.updateLastCountDownTick(mc.ingameGUI.updateCounter);
-		if (autoReferee.countingDown)
-			autoReferee.updateCountdown(mc.ingameGUI.updateCounter);
 		// calculating positions
 		float bigggestWidthTeam = 0;
 		float align = AUTOREFEREE_HUD_ALIGN * scale;
 		int height = AUTOREFEREE_HUD_HEIGHT;
+		
+		//Get the timer details
 		float widthClock = 0;
-		if (!autoReferee.countingDown) {
-			widthClock += align;
-			widthClock += mc.fontRenderer.getStringWidth(autoReferee.getTime()) * scale;
-			widthClock += align;
-		} else if (autoReferee.countingDown) {
-			widthClock += align;
-			widthClock += mc.fontRenderer.getStringWidth(autoReferee.getCountdown()) * scale;
-			widthClock += align;
-		}
+		widthClock += align;
+		widthClock += mc.fontRenderer.getStringWidth(autoReferee.getTime()) * scale;
+		widthClock += align;
+		
 		float xOffset = 0;
 		float width = 0;
 		String stringRemainingPlayers = autoReferee.getNumberOfPlayersRemainingString();
@@ -207,8 +194,6 @@ public class AutoRefereeHUDUHC extends AutoRefereeHUD {
 		xOffset = scaledResolution.getScaledWidth() / 2 - widthClock / 2 - widthText/2;
 		xOffset += align;
 		String text = autoReferee.getTime();
-		if(autoReferee.countingDown)
-			text = autoReferee.getCountdown();
 		width = mc.fontRenderer.getStringWidth(text) * scale;
 		mc.ingameGUI.drawRect((int) (xOffset - align), 0, (int) (xOffset + width + align), height, Long.valueOf("EF3F3F3F", 16).intValue());
 		autoReferee.renderString(text, xOffset, 1, scale, 16777215, true);
