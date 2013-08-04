@@ -4,6 +4,7 @@ package net.minecraft.src;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -23,15 +25,19 @@ import org.lwjgl.opengl.GL12;
 public class AutoReferee {
 	public static final String CHANNEL = "autoref:referee";
 	public static final String DELIMITER = "\\|";
+	public static final char DELIMITER_SEND = '|';
+	public static final String PLUGIN_CHANNEL_ENC = "UTF-8";
 	
 	public static final int MAX_NUMBER_OF_PLAYERS_ON_SCREEN = 4;
 
-	public static final int AUTOREFEREE_ICON_NUMBER_IN_WIDTH = 2;
-	public static final int AUTOREFEREE_ICON_NUMBER_IN_HEIGHT = 2;
-	public static final int AUTOREFEREE_ICON_TEXTURE_SIZE = 2;
+	public static final int AUTOREFEREE_ICON_NUMBER_IN_WIDTH = 4;
+	public static final int AUTOREFEREE_ICON_NUMBER_IN_HEIGHT = 4;
+	public static final int AUTOREFEREE_ICON_TEXTURE_SIZE = 4;
 	public static final int AUTOREFEREE_WINNERS_ICON = 0;
-	public static final int AUTOREFEREE_KILL_STREAK_ICON = 2;
-	public static final int AUTOREFEREE_DOMINATION_ICON = 3;
+	public static final int AUTOREFEREE_SKULL_ICON = 1;
+	public static final int AUTOREFEREE_ARROW_ICON = 2;
+	public static final int AUTOREFEREE_KILL_STREAK_ICON = 4;
+	public static final int AUTOREFEREE_DOMINATION_ICON = 5;
 	public static final int AUTOREFEREE_ICON_SIZE = 13;
 
 	public static final int PLAYER_NAMETAG_HEARTS_X_OFFSET = -40;
@@ -96,7 +102,7 @@ public class AutoReferee {
 		this.messages.clear();
 		this.lastMessage = null;
 		this.gameType = "RFW";
-		this.nightVision = false;
+		this.nightVision = true;
 		this.swapTeams = false;
 		this.registeredChannel = false;
 		this.closestPlayers = null;
@@ -133,8 +139,8 @@ public class AutoReferee {
 			this.netClientHandler.addToSendQueue(p);
 	}
 
-	public void handleCustomPayload(Packet250CustomPayload par1Packet250CustomPayload) {
-		String s = new String(par1Packet250CustomPayload.data, Charset.forName("UTF-8"));
+	public void handleCustomPayload(Packet250CustomPayload customPayloadPackage) {
+		String s = new String(customPayloadPackage.data, Charset.forName(PLUGIN_CHANNEL_ENC));
 		Logger.getLogger("Minecraft").info("Received package: '" + s + "'.");
 		String[] command = s.split(DELIMITER);
 		if ("player".equals(command[0])) {
@@ -289,12 +295,13 @@ public class AutoReferee {
 				swapTeams = !swapTeams;
 			} else if ("nightvis".equals(command[2])){
 				if(command.length >= 4){
-					if(command[3]=="1")
+					if("1".equalsIgnoreCase(command[3]))
 						nightVision = true;
-					else if(command[3]=="0")
+					else if("0".equalsIgnoreCase(command[3]))
 						nightVision = false;
-				} else
+				} else {
 					nightVision = !nightVision;
+				}
 			} else if ("gametype".equals(command[2])) {
 				gameType = command[3].toUpperCase();
 			} else if("gameplay".equals(command[2])){
@@ -311,6 +318,17 @@ public class AutoReferee {
 			if ("ucp".equals(command[2])) {
 				updateClosestPlayers();
 			}
+		}
+	}
+	
+	public void messageServer(String ...parts) {
+		String msg = StringUtils.join(parts, DELIMITER_SEND);
+		Packet250CustomPayload packet;
+		try {
+			packet = new Packet250CustomPayload(CHANNEL, msg.getBytes(PLUGIN_CHANNEL_ENC));
+			this.netClientHandler.addToSendQueue(packet);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -574,7 +592,7 @@ public class AutoReferee {
 	public void addObjectiveForTeam(String name, int id, int dataValue) {
 		AutoRefereeTeam at = teams.get(name);
 		if (at != null)
-			at.addObjective(new AutoRefereeObjective(id, dataValue));
+			at.addObjective(new AutoRefereeObjective(id, dataValue, at));
 	}
 
 	public void removeObjectiveForTeam(String name, int id, int dataValue) {

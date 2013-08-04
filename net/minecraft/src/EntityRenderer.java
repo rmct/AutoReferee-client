@@ -1686,7 +1686,7 @@ public class EntityRenderer
 
         float var17;
 
-        if (var3.isPotionActive(Potion.nightVision))
+        if (var3.isPotionActive(Potion.nightVision) || AutoReferee.get().nightVision)
         {
             var23 = this.getNightVisionBrightness(this.mc.thePlayer, par1);
             var17 = 1.0F / this.fogColorRed;

@@ -8,7 +8,7 @@ public class AutoRefereeHUD {
 	public static float AUTOREFEREE_HUD_SCALE_CUP_ICON = (float) AUTOREFEREE_HUD_HEIGHT / AutoReferee.AUTOREFEREE_ICON_SIZE;
 	public static float AUTOREFEREE_HUD_WIDTH_CUP_ICON = AutoReferee.AUTOREFEREE_ICON_SIZE * AUTOREFEREE_HUD_SCALE_CUP_ICON;
 	
-	public static int PLAYER_LIST_BOX_WIDTH = 150;
+	public static int PLAYER_LIST_BOX_WIDTH = 160;
 	public static int PLAYER_LIST_BOX_HEIGHT = 230;
 	public static int PLAYER_LIST_BOX_PADDING = 5;
 	public static int PLAYER_LIST_TEAM_OFFSET = 8;
@@ -24,7 +24,7 @@ public class AutoRefereeHUD {
 	public static int PLAYER_LIST_ARMOR_X_OFFSET = PLAYER_LIST_HEALTH_X_OFFSET;
 	public static int PLAYER_LIST_ARMOR_Y_OFFSET = 16;
 	public static int PLAYER_LIST_HEAD_X_OFFSET = 105;
-	public static int PLAYER_LIST_HEAD_Y_OFFSET = 25;
+	public static int PLAYER_LIST_HEAD_Y_OFFSET = 27;
 	public static int PLAYER_LIST_OBJECTIVES_X_OFFSET = 10;
 	public static int PLAYER_LIST_OBJECTIVES_Y_OFFSET = 27;
 	public static int PLAYER_LIST_OBJECTIVE_OFFSET = 16;
@@ -34,6 +34,9 @@ public class AutoRefereeHUD {
 	public static int PLAYER_LIST_DOMINATION_Y_OFFSET = 24;
 	public static int PLAYER_LIST_KILL_STREAK_X_OFFSET = PLAYER_LIST_DOMINATION_X_OFFSET;
 	public static int PLAYER_LIST_KILL_STREAK_Y_OFFSET = 38;
+	public static int PLAYER_LIST_BUTTONS_OFFSET = 145;
+	public static int PLAYER_LIST_BED_BUTTON_OFFSET = 13;
+	public static int PLAYER_LIST_DEATH_INV_BUTTON_OFFSET = 35;
 	
 	public static int TEAM_LIST_BOX_WIDTH = 150;
 	public static int TEAM_LIST_BOX_PADDING = 5;

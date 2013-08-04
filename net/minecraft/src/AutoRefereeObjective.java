@@ -6,13 +6,15 @@ public class AutoRefereeObjective {
 	private int id;
 	private int dataValue;
 	private AutoRefereeObjectiveStatus status;
+	private AutoRefereeTeam team;
 
-	public AutoRefereeObjective(int id) {
-		this(id, 0, AutoRefereeObjectiveStatus.FLEECY_BOX);
+	public AutoRefereeObjective(int id, AutoRefereeTeam team) {
+		this(id, 0, team);
 	}
 
-	public AutoRefereeObjective(int id, int dataValue) {
+	public AutoRefereeObjective(int id, int dataValue, AutoRefereeTeam team) {
 		this(id, dataValue, AutoRefereeObjectiveStatus.FLEECY_BOX);
+		this.team = team;
 	}
 
 	public AutoRefereeObjective(int id, int dataValue, AutoRefereeObjectiveStatus status) {
@@ -36,6 +38,16 @@ public class AutoRefereeObjective {
 	public AutoRefereeObjectiveStatus getStatus() {
 		return this.status;
 	}
+	
+	public AutoRefereeTeam getTeam(){
+		return this.team;
+	}
 
+	@Override
+	public String toString(){
+		if(dataValue == 0)
+			return "" + id;
+		return id + "," + dataValue;
+	}
 }
 // END CODE

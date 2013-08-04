@@ -472,11 +472,10 @@ public class GuiIngame extends Gui
 		else if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))
 			AutoRefereeHUDUHC.renderPlayerList(this.mc);
 		}}
-     	//Logger.getLogger("Minecraft").info(AutoReferee.get().registeredChannel + " - ");
 		//END CODE
 
 		//START CODE
-     	if (!AutoReferee.get().showPlayerList(updateCounter) && !AutoReferee.get().showTeamList(updateCounter)) {
+     	if (!AutoReferee.get().showPlayerList(updateCounter) && !AutoReferee.get().showTeamList(updateCounter) && !(mc.currentScreen instanceof AutoRefereeHUDRFWPlayerListGui) && !(mc.currentScreen instanceof AutoRefereeHUDRFWObjectiveListGui)) {
      		if ("RFW".equalsIgnoreCase(AutoReferee.get().getGameType()))
      			AutoRefereeHUDRFW.renderGeneralHUD(this.mc);
      		if ("UHC".equalsIgnoreCase(AutoReferee.get().getGameType()))

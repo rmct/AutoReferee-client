@@ -6,7 +6,8 @@ import org.lwjgl.opengl.GL11;
 public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 
 	public static void renderPlayerList(Minecraft mc) {
-		ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+		mc.displayGuiScreen(new AutoRefereeHUDRFWPlayerListGui());
+		/*ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		AutoReferee autoReferee = AutoReferee.get();
 		float scale = (float) (scaledResolution.getScaledHeight() - 45) / (float) PLAYER_LIST_BOX_HEIGHT;
@@ -40,10 +41,10 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			GL11.glScalef(scale, scale, scale);
 			renderTeamInPlayerList(at2, scaleName, mc);
 			GL11.glPopMatrix();
-		}
+		}*/
 	}
 
-	private static void renderTeamInPlayerList(AutoRefereeTeam at, float scaleName, Minecraft mc) {
+	protected static void renderTeamInPlayerList(AutoRefereeTeam at, float scaleName, Minecraft mc) {
 		AutoReferee autoReferee = AutoReferee.get();
 		String name = at.getName();
 		mc.ingameGUI.drawRect(0, 0, PLAYER_LIST_BOX_WIDTH, PLAYER_LIST_BOX_HEIGHT, at.getBoxColor());
@@ -60,14 +61,14 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			}
 			GL11.glTranslatef(0, PLAYER_LIST_PLAYERS_Y_OFFSET + i * PLAYER_LIST_PLAYER_HEIGHT, 0);
 			autoReferee.renderString(apl.getName(), PLAYER_LIST_NAME_OFFSET, 0, 1F, textcolor, true);
-			autoReferee.renderString(apl.getDeaths() + "", PLAYER_LIST_DEATHS_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, textcolor, true);
-			autoReferee.renderString(apl.getKills() + "", PLAYER_LIST_KILLS_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, textcolor, true);
-			autoReferee.renderString(apl.getAccuracyString(), PLAYER_LIST_ACC_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F, textcolor, true);
+			autoReferee.renderString("K "+apl.getKills(), PLAYER_LIST_KILLS_OFFSET, 0, 1F, textcolor, true);
+			autoReferee.renderString("D "+apl.getDeaths(), PLAYER_LIST_KILLS_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, textcolor, true);
+			autoReferee.renderString(apl.getAccuracyString(), PLAYER_LIST_KILLS_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F, textcolor, true);
 			health = apl.getHealth();
 			armor = apl.getArmor();
 			autoReferee.renderHearts(health, PLAYER_LIST_HEALTH_X_OFFSET, PLAYER_LIST_HEALTH_Y_OFFSET, 1F, true);
 			autoReferee.renderArmor(armor, PLAYER_LIST_ARMOR_X_OFFSET, PLAYER_LIST_ARMOR_Y_OFFSET, 1F);
-			autoReferee.renderSkinHead(apl, PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
+			//autoReferee.renderSkinHead(apl, PLAYER_LIST_HEAD_X_OFFSET, PLAYER_LIST_HEAD_Y_OFFSET, 1F);
 
 			j = 0;
 			for (AutoRefereeObjective obj : apl.getObjectives()) {
@@ -89,7 +90,8 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 	}
 
 	public static void renderTeamList(Minecraft mc) {
-		ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+		mc.displayGuiScreen(new AutoRefereeHUDRFWObjectiveListGui());
+		/*ScaledResolution scaledResolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		AutoReferee autoReferee = AutoReferee.get();
 		float scale = (float) (scaledResolution.getScaledHeight() - 45) / (float) TEAM_LIST_BOX_HEIGHT;
@@ -122,13 +124,13 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			GL11.glScalef(scale, scale, scale);
 			renderTeamInTeamList(at2, scaleName, mc);
 			GL11.glPopMatrix();
-		}
+		}*/
 	}
 
-	private static void renderTeamInTeamList(AutoRefereeTeam at, float nameScale, Minecraft mc) {
+	protected static void renderTeamInTeamList(AutoRefereeTeam at, float nameScale, Minecraft mc) {
 		AutoReferee autoReferee = AutoReferee.get();
 		String name = at.getName();
-		int height = TEAM_LIST_OBJECTIVES_Y_OFFSET + at.getObjectives().size() * TEAM_LIST_OBJECTIVES_HEIGHT + 20;
+		int height = TEAM_LIST_OBJECTIVES_Y_OFFSET + (at.getObjectives().size()+2) * TEAM_LIST_OBJECTIVES_HEIGHT + 20;
 		mc.ingameGUI.drawRect(0, 0, TEAM_LIST_BOX_WIDTH, height, at.getBoxColor());
 		autoReferee.renderCenteredString(name, TEAM_LIST_BOX_WIDTH / 2, TEAM_LIST_TEAM_OFFSET, nameScale, 16777215, true);
 		int i = 0;
@@ -136,11 +138,26 @@ public class AutoRefereeHUDRFW extends AutoRefereeHUD {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, TEAM_LIST_OBJECTIVES_Y_OFFSET + i * TEAM_LIST_OBJECTIVES_HEIGHT, 0);
 			mc.ingameGUI.drawRect(TEAM_LIST_OBJ_X_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, 0x33FFFFFF);
-			autoReferee.renderItem(obj.getId(), obj.getData(), TEAM_LIST_OBJ_X_OFFSET, TEAM_LIST_OBJ_Y_OFFSET, 1F);
+			//autoReferee.renderItem(obj.getId(), obj.getData(), TEAM_LIST_OBJ_X_OFFSET, TEAM_LIST_OBJ_Y_OFFSET, 1F);
 			autoReferee.renderString(obj.getStatus().getName(), TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_TEXT_OFFSET, 0, 1F, 16777215, true);
 			GL11.glPopMatrix();
 			++i;
 		}
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0, TEAM_LIST_OBJECTIVES_Y_OFFSET + i * TEAM_LIST_OBJECTIVES_HEIGHT, 0);
+		mc.ingameGUI.drawRect(TEAM_LIST_OBJ_X_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, 0x33FFFFFF);
+		autoReferee.renderString("Go to Victory Monument", TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_TEXT_OFFSET, 0, 1F, 16777215, true);
+		GL11.glPopMatrix();
+		++i;
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0, TEAM_LIST_OBJECTIVES_Y_OFFSET + i * TEAM_LIST_OBJECTIVES_HEIGHT, 0);
+		mc.ingameGUI.drawRect(TEAM_LIST_OBJ_X_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET - TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, TEAM_LIST_OBJ_Y_OFFSET + TEAM_LIST_OBJ_RECT_WIDTH + TEAM_LIST_OBJ_BORDER_WIDTH, 0x33FFFFFF);
+		autoReferee.renderString("Go to spawn", TEAM_LIST_OBJ_X_OFFSET + TEAM_LIST_TEXT_OFFSET, 0, 1F, 16777215, true);
+		GL11.glPopMatrix();
+		++i;
+		
 	}
 
 	public static void renderGeneralHUD(Minecraft mc) {
