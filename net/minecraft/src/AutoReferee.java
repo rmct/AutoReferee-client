@@ -102,7 +102,7 @@ public class AutoReferee {
 		this.messages.clear();
 		this.lastMessage = null;
 		this.gameType = "RFW";
-		this.nightVision = true;
+		this.nightVision = false;
 		this.swapTeams = false;
 		this.registeredChannel = false;
 		this.closestPlayers = null;
