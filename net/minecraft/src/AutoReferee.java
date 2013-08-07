@@ -224,7 +224,7 @@ public class AutoReferee {
 				}
 			} else if ("goal".equals(command[2])) {
 				// team object events
-				if("surive".equalsIgnoreCase(command[3])){
+				if("survive".equalsIgnoreCase(command[3])){
 					//TODO add survive goal stuff
 				}else if("core".equalsIgnoreCase(command[3])){
 					//TODO add core goal stuff
