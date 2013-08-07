@@ -1625,6 +1625,14 @@ public class Minecraft implements IPlayerUsage
                             {
                                 this.gameSettings.smoothCamera = !this.gameSettings.smoothCamera;
                             }
+                            
+                            //START CODE
+                            if (Keyboard.getEventKey() == 64)
+                            {
+                                AutoReferee autoReferee = AutoReferee.get();
+                                autoReferee.swapTeams = !autoReferee.swapTeams;
+                            }
+                            //END CODE
                         }
 
                         for (var1 = 0; var1 < 9; ++var1)
