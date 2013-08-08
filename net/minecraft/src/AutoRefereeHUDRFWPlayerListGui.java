@@ -5,6 +5,7 @@ import static net.minecraft.src.AutoRefereeHUD.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class AutoRefereeHUDRFWPlayerListGui extends GuiScreen{
@@ -46,6 +47,9 @@ public class AutoRefereeHUDRFWPlayerListGui extends GuiScreen{
 	}
 	
 	public void drawScreen(int par1, int par2, float par3){
+		if(!Keyboard.isKeyDown(mc.gameSettings.keyBindPlayerList.keyCode))
+			mc.displayGuiScreen((GuiScreen) null);
+		
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		AutoRefereeTeam at1 = autoReferee.getLeftTeam(mc.ingameGUI.updateCounter);
 		AutoRefereeTeam at2 = autoReferee.getRightTeam(mc.ingameGUI.updateCounter);
