@@ -49,6 +49,8 @@ public class AutoRefereeHUDRFWObjectiveListGui extends GuiScreen {
 		if(!Keyboard.isKeyDown(mc.gameSettings.keyBindDrop.keyCode))
 			mc.displayGuiScreen((GuiScreen) null);
 		
+		handleMovements();
+		
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		AutoRefereeTeam at1 = autoReferee.getLeftTeam(mc.ingameGUI.updateCounter);
 		AutoRefereeTeam at2 = autoReferee.getRightTeam(mc.ingameGUI.updateCounter);
@@ -79,6 +81,15 @@ public class AutoRefereeHUDRFWObjectiveListGui extends GuiScreen {
 		}
 		
 		super.drawScreen(par1, par2, par3);
+	}
+	
+	private void handleMovements(){
+		this.mc.gameSettings.keyBindForward.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindForward.keyCode);
+		this.mc.gameSettings.keyBindBack.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindBack.keyCode);
+		this.mc.gameSettings.keyBindLeft.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindLeft.keyCode);
+		this.mc.gameSettings.keyBindRight.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindRight.keyCode);
+		this.mc.gameSettings.keyBindJump.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindJump.keyCode);
+		this.mc.gameSettings.keyBindSneak.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.keyCode);
 	}
 
 	protected void actionPerformed(GuiButton guiButton){
