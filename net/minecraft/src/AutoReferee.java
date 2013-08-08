@@ -84,6 +84,7 @@ public class AutoReferee {
 	private List<AutoRefereePlayer> closestPlayers;
 	private int closestPlayersUpdateTick;
 	private boolean ffa;
+	private String matchTime;
 
 	public AutoReferee() {
 		renderItem = new RenderItem();
@@ -108,6 +109,9 @@ public class AutoReferee {
 		this.closestPlayers = null;
 		this.ffa = false;
 		this.closestPlayersUpdateTick = 0;
+		this.countdownEnd = null;
+		this.matchStart = null;
+		this.matchTime = "00:00:00";
 	}
 
 	public static AutoReferee get() {
@@ -388,7 +392,7 @@ public class AutoReferee {
 	
 	public String getTime(){
 		if(!gameRunning && !countingDown)
-			return "00:00:00";
+			return matchTime;
 		int seconds = 0;
 		if(gameRunning){
 			Calendar now = Calendar.getInstance();
@@ -399,6 +403,10 @@ public class AutoReferee {
 			if(seconds == 0)
 				countingDown = false;
 		}
+		return secondsToTimeString(seconds);
+	}
+	
+	public String secondsToTimeString(int seconds){
 		int numberOfSeconds = seconds % 60;
 		int numberOfMinutes = (seconds / 60) % 60;
 		int numberOfHours = seconds / 60 / 60;
@@ -449,6 +457,7 @@ public class AutoReferee {
 			matchStart.add(Calendar.MINUTE, -numberOfMinutes);
 			matchStart.add(Calendar.HOUR, -numberOfHours);
 		}
+		this.matchTime = secondsToTimeString(numberOfHours*60*60+numberOfMinutes*60+numberOfSeconds);
 	}
 
 	public AutoRefereePlayer addPlayer(String name) {
