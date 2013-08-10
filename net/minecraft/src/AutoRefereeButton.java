@@ -42,7 +42,7 @@ public class AutoRefereeButton extends GuiButton {
 		if("TP".equalsIgnoreCase(type)){
 			message = new String[]{"tp","player", player.getName(),"player"};
 		}else if("TPBed".equalsIgnoreCase(type)){
-			message = new String[]{"tp","player", player.getName(),"bed"};
+			message = new String[]{"tp","player", player.getName(),"spawn"};
 		}else if("TPDeath".equalsIgnoreCase(type)){
 			message = new String[]{"tp","player", player.getName(),"death"};
 		}else if("VI".equalsIgnoreCase(type)){
