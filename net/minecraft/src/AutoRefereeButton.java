@@ -17,11 +17,13 @@ public class AutoRefereeButton extends GuiButton {
 	private AutoRefereeObjective obj;
 	private AutoRefereeTeam team;
 
-	public AutoRefereeButton(int xPos, int yPos, float scale, String name){
-		super(1, xPos, yPos, 0, 0, name);
+	public AutoRefereeButton(int xPos, int yPos, float scale, String type){
+		super(1, xPos, yPos, 0, 0, "");
+		
+		this.type = type;
 		
 		if("TP".equalsIgnoreCase(type))
-			scale *= 20.0F/AutoReferee.AUTOREFEREE_ICON_SIZE;
+			scale /= AutoReferee.AUTOREFEREE_ICON_SIZE/20.0F;
 		else if("OBJ".equalsIgnoreCase(type) || "VM".equalsIgnoreCase(type) || "SPAWN".equalsIgnoreCase(type))
 			scale *= 16.0F/AutoReferee.AUTOREFEREE_ICON_SIZE;
         
@@ -32,12 +34,11 @@ public class AutoRefereeButton extends GuiButton {
 	}
 	
 	public AutoRefereeButton(float xPos, float yPos, float scale, String type){
-		this((int) xPos, (int) yPos, scale, "");
-		this.type = type;
+		this((int) xPos, (int) yPos, scale, type);
 	}
 	
 	public AutoRefereeButton(float xPos, float yPos, float scale, AutoRefereePlayer player, String type){
-		this(xPos, yPos, scale, type);
+		this(xPos, yPos, scale,type);
 		this.player = player;
 		if("TP".equalsIgnoreCase(type)){
 			message = new String[]{"tp","player", player.getName(),"player"};
@@ -72,26 +73,23 @@ public class AutoRefereeButton extends GuiButton {
 	
 	public void drawButton(Minecraft mc, int mouseX, int mouseY)
     {
-    	//TODO add coloring if disabled..
-    	
     	float xTop = xPosition + width/2 - AutoReferee.AUTOREFEREE_ICON_SIZE*scale/2;
     	float yTop = yPosition + height/2 - AutoReferee.AUTOREFEREE_ICON_SIZE*scale/2;
         if("TP".equalsIgnoreCase(type))
-        	AutoReferee.get().renderSkinHead(player, xTop, yTop, scale);
+        	AutoReferee.get().renderSkinHead(player, xTop, yTop, scale*AutoReferee.AUTOREFEREE_ICON_SIZE/20.0F);
         else if("TPBed".equalsIgnoreCase(type))
-        	AutoReferee.get().renderItem(355, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16);
+        	AutoReferee.get().renderItem(355, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16.0F);
         else if("TPDeath".equalsIgnoreCase(type))
         	AutoReferee.get().renderAutoRefereeIcon(AutoReferee.AUTOREFEREE_SKULL_ICON, 0, xTop, yTop, scale);
         else if("VI".equalsIgnoreCase(type))
-        	AutoReferee.get().renderItem(54, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16);
+        	AutoReferee.get().renderItem(54, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16.0F);
         else if("VIDeath".equalsIgnoreCase(type))
-        	AutoReferee.get().renderItem(130, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16);
+        	AutoReferee.get().renderItem(130, 0, (int)(xTop), (int)(yTop), scale*AutoReferee.AUTOREFEREE_ICON_SIZE/16.0F);
         else if("OBJ".equalsIgnoreCase(type))
         	AutoReferee.get().renderItem(obj.getId(), obj.getData(), (int) xTop, (int) yTop, scale);
         else if("SPAWN".equalsIgnoreCase(type))
         	AutoReferee.get().renderAutoRefereeIcon(AutoReferee.AUTOREFEREE_ARROW_ICON, 0, xTop, yTop, scale);
         else if("VM".equalsIgnoreCase(type))
         	AutoReferee.get().renderAutoRefereeIcon(AutoReferee.AUTOREFEREE_WINNERS_ICON, 0, xTop, yTop, scale);
-        
     }
 }
